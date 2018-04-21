@@ -9,7 +9,7 @@ from bams.query_strategies import (
 )
 
 
-NDIM = 1
+NDIM = 2
 POOL_SIZE = 500
 BUDGET = 10
 BASE_KERNELS = ["PER", "LIN"]
@@ -36,13 +36,14 @@ def oracle(x):
     """Run a psychopy experiment by scaling up the features so they can be used as input.
     Then scale down the output for the active learner.
     """
-    n_dots = 100
+    max_n_dots = 100
     # Scale up
     print(x[0])
     n_dots = scale_up(n_dots, float(x[0]))
-    print(n_dots)
-    guess = dot_experiment(win, answer_text, n_dots)
-    score = (int(guess)/n_dots)
+    contrast = float(x[1])
+    print(n_dots, contrast)
+    guess = dot_experiment(win, answer_text, n_dots, contrast)
+    score = (float(guess)/float(n_dots))
     return score
 
 

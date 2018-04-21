@@ -24,7 +24,7 @@ def get_typed_answer():
         win.flip()
 
 
-def run_experiment(win, answer_text, n_dots):
+def run_experiment(win, answer_text, n_dots, contrast):
     dot_xys = []
 
     for dot in range(n_dots):
@@ -39,7 +39,7 @@ def run_experiment(win, answer_text, n_dots):
         elementTex=None,
         elementMask="circle",
         sizes=10,
-        contrs=random.random(),
+        contrs=contrast,
         nElements = n_dots,
         xys = dot_xys,
     )
