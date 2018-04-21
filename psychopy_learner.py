@@ -39,7 +39,7 @@ def oracle(x):
     max_n_dots = 100
     # Scale up
     print(x[0])
-    n_dots = scale_up(n_dots, float(x[0]))
+    n_dots = scale_up(max_n_dots, float(x[0]))
     contrast = float(x[1])
     print(n_dots, contrast)
     guess = dot_experiment(win, answer_text, n_dots, contrast)
