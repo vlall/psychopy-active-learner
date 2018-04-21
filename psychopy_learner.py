@@ -1,4 +1,5 @@
 import random
+import math
 from psychopy import visual, event, core
 import dot_experiment
 from bams.learners import ActiveLearner
@@ -8,13 +9,14 @@ from bams.query_strategies import (
     RandomStrategy,
 )
 
-
+# Set active learner parameters
 NDIM = 2
 POOL_SIZE = 500
 BUDGET = 10
 BASE_KERNELS = ["PER", "LIN"]
 DEPTH = 1
 
+# Set psychopy variables
 win = visual.Window(
 size=[500, 500],
 units="pix",
@@ -40,10 +42,11 @@ def oracle(x):
     # Scale up
     print(x[0])
     n_dots = scale_up(max_n_dots, float(x[0]))
+    # No need to scale contrast
     contrast = float(x[1])
     print(n_dots, contrast)
     guess = dot_experiment(win, answer_text, n_dots, contrast)
-    score = (float(guess)/float(n_dots))
+    score = 1 - (abs(float(guess)-float(n_dots)) / float(n_dots))
     return score
 
 
