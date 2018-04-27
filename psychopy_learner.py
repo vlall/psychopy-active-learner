@@ -39,11 +39,9 @@ def oracle(x):
     """
     max_n_dots = 100
     # Scale up
-    print(x[0])
     n_dots = scale_up(max_n_dots, float(x[0]))
     # No need to scale contrast
     contrast = float(x[1])
-    print(n_dots, contrast)
     answer_text = visual.TextStim(win)
     guess = dot_experiment.run_experiment(win, answer_text, n_dots, contrast)
     score = 1 - (abs(float(guess)-float(n_dots)) / float(n_dots))
