@@ -10,7 +10,7 @@ from bams.query_strategies import (
 )
 
 # Set active learner parameters
-NDIM = 2
+NDIM = 3
 POOL_SIZE = 500
 BUDGET = 10
 BASE_KERNELS = ["PER", "LIN"]
@@ -22,7 +22,6 @@ size=[500, 500],
 units="pix",
 fullscr=False
 )
-answer_text = visual.TextStim(win)
 
 def scale_up(threshold, dim):
     """Rescale up to actual values"""
@@ -45,7 +44,8 @@ def oracle(x):
     # No need to scale contrast
     contrast = float(x[1])
     print(n_dots, contrast)
-    guess = dot_experiment(win, answer_text, n_dots, contrast)
+    answer_text = visual.TextStim(win)
+    guess = dot_experiment.run_experiment(win, answer_text, n_dots, contrast)
     score = 1 - (abs(float(guess)-float(n_dots)) / float(n_dots))
     return score
 

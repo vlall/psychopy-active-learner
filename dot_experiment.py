@@ -1,9 +1,10 @@
 import random
 from psychopy import visual, event, core
+import math
 
 
 # Collect responses
-def get_typed_answer():
+def get_typed_answer(win, answer_text):
     answer_text.text = ''
     while True:
         key = event.waitKeys()[0]
@@ -22,6 +23,7 @@ def get_typed_answer():
         # Show current answer state
         answer_text.draw()
         win.flip()
+    return win, answer_text
 
 
 def run_experiment(win, answer_text, n_dots, contrast):
@@ -49,4 +51,15 @@ def run_experiment(win, answer_text, n_dots, contrast):
     core.wait(4)
 
     # Collect response
-    return (get_typed_answer())
+    return (get_typed_answer(win, answer_text))
+
+if __name__=="__main__":
+    win = visual.Window(
+    size=[500, 500],
+    units="pix",
+    fullscr=False
+    )
+    answer_text = visual.TextStim(win)
+    guess = run_experiment(win, answer_text, 10, .90)
+    print(guess)
+
