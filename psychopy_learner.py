@@ -12,9 +12,9 @@ from bams.query_strategies import (
 # Set active learner parameters
 NDIM = 3
 POOL_SIZE = 500
-BUDGET = 10
+BUDGET = 100
 BASE_KERNELS = ["PER", "LIN"]
-DEPTH = 1
+DEPTH = 2
 
 # Set psychopy variables
 win = visual.Window(
@@ -29,7 +29,7 @@ def scale_up(threshold, dim):
     return out
 
 def scale_down(threshold, dim):
-    """Rescale 0 =< output =< 1"""
+    """Rescale 0 <= output <= 1"""
     out = float(dim/threshold) if threshold else 0.0
     return out
 
@@ -44,9 +44,8 @@ def oracle(x):
     contrast = float(x[1])
     answer_text = visual.TextStim(win)
     guess = dot_experiment.run_experiment(win, answer_text, n_dots, contrast)
-    score = 1 - (abs(float(guess)-float(n_dots)) / float(n_dots))
-    return score
-
+    #score = 1 - (abs(float(guess)-float(n_dots)) / float(n_dots))
+    return (n_dots/100.0)
 
 learner = ActiveLearner(
     query_strategy=RandomStrategy(pool=HyperCubePool(NDIM, POOL_SIZE)),
@@ -56,9 +55,18 @@ learner = ActiveLearner(
     ndim=NDIM,
 )
 
+trials = 0
+threshold = 0.02
 while learner.budget > 0:
+    trials+=1
     x = learner.next_query()
     y = learner.query(oracle, x)
     learner.update(x, y)
-    print(learner.posteriors)
-    print(learner.map_model)
+    if trials > 9:
+        posteriors = learner.posteriors
+        for i, model in enumerate(learner.models):
+            print(model)
+            if posteriors[i] > threshold:
+                print(posteriors[i])
+                print("")
+        print("*****")
