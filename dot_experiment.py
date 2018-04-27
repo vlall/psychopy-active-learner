@@ -5,6 +5,7 @@ import math
 
 # Collect responses
 def get_typed_answer(win, answer_text):
+    instruction_text = visual.TextStim(win, text = u'How many dots did you see?', pos=(0, 100))
     answer_text.text = ''
     while True:
         key = event.waitKeys()[0]
@@ -21,6 +22,7 @@ def get_typed_answer(win, answer_text):
             return(answer_text.text)
 
         # Show current answer state
+        instruction_text.draw()
         answer_text.draw()
         win.flip()
     return win, answer_text
