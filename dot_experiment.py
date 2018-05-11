@@ -36,6 +36,7 @@ def run_experiment(win, answer_text, n_dots, contrast):
         dot_y = random.uniform(-250, 250)
         dot_xys.append([dot_x, dot_y])
 
+    print(dot_xys)
 
     dot_stim = visual.ElementArrayStim(
         win=win,
@@ -50,7 +51,6 @@ def run_experiment(win, answer_text, n_dots, contrast):
 
     dot_stim.draw()
     win.flip()
-    core.wait(4)
 
     # Collect response
     return (get_typed_answer(win, answer_text))
