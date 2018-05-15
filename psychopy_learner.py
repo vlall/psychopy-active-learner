@@ -10,14 +10,12 @@ from bams.query_strategies import (
     RandomStrategy,
 )
 import numpy as np
-import matplotlib
-matplotlib.use("TkAgg")
-from matplotlib import pyplot as plt
+
 
 # Set active learner parameters
 NDIM = 1
 POOL_SIZE = 500
-BUDGET = 20
+BUDGET = 100
 BASE_KERNELS = ["PER", "LIN"]
 DEPTH = 2
 win = visual.Window(
@@ -71,27 +69,17 @@ if __name__ == "__main__":
     trial = 0
     threshold = 0.01
     outterDict = {}
-    modelDict = {}
+    posteriorMatrix = np.zeros((BUDGET, len(learner.models)))
     maxModel = []
     while learner.budget > 0:
-        trial+=1
         x = learner.next_query()
         y = learner.query(oracle, x)
         learner.update(x, y)
         print(trial)
         posteriors = learner.posteriors
         for i, model in enumerate(learner.models):
-            if posteriors[i] >= threshold:
-                modelDict[trial] = posteriors[i]
-                outterDict[str(model)] = modelDict
-                print("The probablity of %s is: %s" % (model, posteriors[i]))
-                if trial==BUDGET:
-                    print(outterDict.keys())
-                    print(model)
-                    print(outterDict[str(model)])
-                    answerDict = outterDict[str(model)]
-                    df = pd.DataFrame(answerDict.items(), columns=["Trial", "Probablity"])
-
-        print("*****")
-    #filtered_dict = {k:v for (k,v) in outterDict.items() if v[BUDGET]}
-    #df = pd.DataFrame([filtered_dict], columns=filtered_dict.keys())
+            posteriorMatrix[trial, i] = posteriors[i]
+        trial+=1
+    df = pd.DataFrame(posteriorMatrix, columns=[str(i) for i in learner.models])
+    print(df)
+    df.to_pickle("BALD_1.pkl")
