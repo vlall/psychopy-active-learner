@@ -10,19 +10,28 @@ from bams.query_strategies import (
     RandomStrategy,
 )
 import numpy as np
-
+import pickle
+import uuid
+import os
+import json
+from time import gmtime, strftime
 
 # Set active learner parameters
-NDIM = 1
+finalData = pd.DataFrame(columns=['n_dots', 'contrast', 'guess', 'n_dim'])
+NAME = "BALD_ALL"
+UUID = str(uuid.uuid4())
+PATH = UUID + "/"
+NDIM = 3
 POOL_SIZE = 500
-BUDGET = 100
-BASE_KERNELS = ["PER", "LIN"]
+BUDGET = 50
+BASE_KERNELS = ["PER", "LIN", "K"]
 DEPTH = 2
 win = visual.Window(
 size=[500, 500],
 units="pix",
 fullscr=False
 )
+
 
 def scale_up(threshold, dim):
     """Rescale up to actual values"""
@@ -41,22 +50,20 @@ def scale_down(threshold, dim):
 def oracle(x):
     """Run a psychopy experiment by scaling up the features so they can be used as input.
     Then scale down the output for the active learner."""
-
     max_n_dots = 100
     # Scale up
-    n_dots = scale_up(max_n_dots, float(x[0]))
+    n_dots = scale_up(max_n_dots, x[0])
     # No need to scale contrast
-    contrast = .9 #float(x[1])
+    contrast = random.random()
     answer_text = visual.TextStim(win)
     guess = dot_experiment.run_experiment(win, answer_text, n_dots, contrast)
     #score = 1 - (abs(float(guess)-float(n_dots)) / float(n_dots))
-    return (n_dots/100.0)
+    print(finalData)
+    finalData.loc[len(finalData)] = [n_dots, contrast, int(guess), list(x)]
+    if guess:
+        return float(guess)/100.0
+    return 0.0
 
-
-def random_oracle(x):
-    x = random.random()
-    print(x)
-    return x
 
 if __name__ == "__main__":
     learner = ActiveLearner(
@@ -79,7 +86,35 @@ if __name__ == "__main__":
         posteriors = learner.posteriors
         for i, model in enumerate(learner.models):
             posteriorMatrix[trial, i] = posteriors[i]
+            if learner.budget==1:
+                s = str(model).split()[0]
+                translate = s.replace("(", "_").rstrip(',')
+                make_folder = "%s/all_models/%s" % (UUID, NAME)
+                if not os.path.exists(make_folder):
+                    os.makedirs(make_folder)
+                filepath = "%s/%s.pkl" % (make_folder, translate)
+                with open(filepath, 'wb') as f:
+                    pickle.dump(model, f)
         trial+=1
     df = pd.DataFrame(posteriorMatrix, columns=[str(i) for i in learner.models])
-    print(df)
-    df.to_pickle("BALD_1.pkl")
+    outputName = PATH + NAME
+    df.to_pickle(outputName + '.pkl')
+    finalData.to_pickle(outputName + '_trials.pkl')
+    config = {
+        'NAME': NAME,
+        "DATE/TIME": strftime("%Y-%m-%d %H:%M:%S", gmtime()),
+        "PATH": PATH,
+        "NAME": NAME,
+        "UUID": UUID,
+        "NDIM": NDIM,
+        "POOL_SIZE": POOL_SIZE,
+        "BUDGET": BUDGET,
+        "BASE_KERNELS": BASE_KERNELS,
+        "DEPTH": DEPTH,
+        "OUTPUT_NAME": outputName
+    }
+    with open(outputName + '_runtime.json', 'w') as outfile:
+        json.dump(config, outfile)
+    print("****** Finished. Use the following path as input for the plot: ******")
+    print(outputName)
+    print("\n")

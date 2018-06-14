@@ -35,8 +35,7 @@ def run_experiment(win, answer_text, n_dots, contrast):
         dot_x = random.uniform(-250, 250)
         dot_y = random.uniform(-250, 250)
         dot_xys.append([dot_x, dot_y])
-
-    print(dot_xys)
+    #print(dot_xys)
 
     dot_stim = visual.ElementArrayStim(
         win=win,
