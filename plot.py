@@ -29,6 +29,10 @@ def plot_100(model):
         predictions = model.predict()
     return predictions
 
+def translate_file(s):
+    s = str(s).split()[0]
+    translate = s.replace("(", "_").rstrip(',')
+    return translate
 
 def transform(pickle):
     df = pd.read_pickle("%s.pkl" % strategy)
@@ -41,7 +45,15 @@ def transform(pickle):
     df['Trial'] = range(1, len(df) + 1)
     return df, plot_name
 
+def model_predict(plot_path, val):
+    print(plot_path)
+    model = pickle.load(open(plot_path), 'rb')
+    return model.predict(val)
 
+PATH = "all_models"
 strategy = "BALD_2"
 df, plot_name = transform(strategy)
-plot(df, strategy, plot_name)
+print plot_name
+plot_path = ("%s/%s/%s") % (PATH, strategy, translate_file(plot_name))
+print model_predict(plot_path, 1)
+#plot(df, strategy, plot_name)

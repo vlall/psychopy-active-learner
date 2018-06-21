@@ -18,7 +18,8 @@ from time import gmtime, strftime
 
 # Set active learner parameters
 finalData = pd.DataFrame(columns=['n_dots', 'contrast', 'guess', 'n_dim'])
-NAME = "BALD_ALL"
+NAME = "Random_All"
+MANIPULATE = "all"
 UUID = str(uuid.uuid4())
 PATH = UUID + "/"
 NDIM = 3
@@ -52,9 +53,17 @@ def oracle(x):
     Then scale down the output for the active learner."""
     max_n_dots = 100
     # Scale up
-    n_dots = scale_up(max_n_dots, x[0])
+    if MANIPULATE=='dots' or MANIPULATE=='all':
+        n_dots = scale_up(max_n_dots, x[0])
+    else:
+        n_dots = scale_up(max_n_dots, random.random())
     # No need to scale contrast
-    contrast = random.random()
+    if MANIPULATE=='contrast':
+        contrast = x[0]
+    elif MANIPULATE=='all':
+        contrast = x[1]
+    else:
+        contrast = random.random()
     answer_text = visual.TextStim(win)
     guess = dot_experiment.run_experiment(win, answer_text, n_dots, contrast)
     #score = 1 - (abs(float(guess)-float(n_dots)) / float(n_dots))
@@ -67,7 +76,7 @@ def oracle(x):
 
 if __name__ == "__main__":
     learner = ActiveLearner(
-        query_strategy=BALD(pool=HyperCubePool(NDIM, POOL_SIZE)),
+        query_strategy=RandomStrategy(pool=HyperCubePool(NDIM, POOL_SIZE)),
         budget=BUDGET,
         base_kernels=BASE_KERNELS,
         max_depth=DEPTH,
@@ -107,11 +116,12 @@ if __name__ == "__main__":
         "NAME": NAME,
         "UUID": UUID,
         "NDIM": NDIM,
+        "MANIPULATE": MANIPULATE,
         "POOL_SIZE": POOL_SIZE,
         "BUDGET": BUDGET,
         "BASE_KERNELS": BASE_KERNELS,
         "DEPTH": DEPTH,
-        "OUTPUT_NAME": outputName
+        "OUTPUT_NAME": outputName,
     }
     with open(outputName + '_runtime.json', 'w') as outfile:
         json.dump(config, outfile)
