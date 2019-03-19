@@ -18,12 +18,12 @@ from time import gmtime, strftime
 
 # Set active learner parameters
 finalData = pd.DataFrame(columns=['n_dots', 'contrast', 'guess', 'n_dim'])
-NAME = "Random_All"
-MANIPULATE = "all"
-UUID = str(uuid.uuid4())
+NAME = "BALD_1"
+MANIPULATE = "dots"
+UUID = "dummy_oracle/" + str(uuid.uuid4())
 PATH = UUID + "/"
-NDIM = 3
-POOL_SIZE = 500
+NDIM = 1
+POOL_SIZE = 25
 BUDGET = 50
 BASE_KERNELS = ["PER", "LIN", "K"]
 DEPTH = 2
@@ -47,6 +47,12 @@ def scale_down(threshold, dim):
     out = float(dim/threshold) if threshold else 0.0
     return out
 
+#def fake_human(x):
+#    finalData.loc[len(finalData)] = [int(x[0]*100), random.uniform(.01,.99), int(x[0]*100), list(x)]
+#    return x[0]
+
+def dummy_oracle(x):
+    return x[0]
 
 def oracle(x):
     """Run a psychopy experiment by scaling up the features so they can be used as input.
@@ -75,13 +81,27 @@ def oracle(x):
 
 
 if __name__ == "__main__":
-    learner = ActiveLearner(
-        query_strategy=RandomStrategy(pool=HyperCubePool(NDIM, POOL_SIZE)),
-        budget=BUDGET,
-        base_kernels=BASE_KERNELS,
-        max_depth=DEPTH,
-        ndim=NDIM,
-    )
+    strategy_name = NAME.split("_")[0]
+    if strategy_name=="BALD":
+        print("Running %s %s" % (strategy_name, str(NDIM)))
+        learner = ActiveLearner(
+            query_strategy=BALD(pool=HyperCubePool(NDIM, POOL_SIZE)),
+            budget=BUDGET,
+            base_kernels=BASE_KERNELS,
+            max_depth=DEPTH,
+            ndim=NDIM,
+        )
+
+    else:
+        print("Running %s %s" % (strategy_name, str(NDIM)))
+        learner = ActiveLearner(
+            query_strategy=RandomStrategy(pool=HyperCubePool(NDIM, POOL_SIZE)),
+            budget=BUDGET,
+            base_kernels=BASE_KERNELS,
+            max_depth=DEPTH,
+            ndim=NDIM,
+        )
+
     trial = 0
     threshold = 0.01
     outterDict = {}
@@ -89,7 +109,7 @@ if __name__ == "__main__":
     maxModel = []
     while learner.budget > 0:
         x = learner.next_query()
-        y = learner.query(oracle, x)
+        y = learner.query(dummy_oracle, x)
         learner.update(x, y)
         print(trial)
         posteriors = learner.posteriors
