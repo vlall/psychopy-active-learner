@@ -109,7 +109,7 @@ if __name__ == "__main__":
     maxModel = []
     while learner.budget > 0:
         x = learner.next_query()
-        y = learner.query(dummy_oracle, x)
+        y = learner.query(oracle, x)
         learner.update(x, y)
         print(trial)
         posteriors = learner.posteriors

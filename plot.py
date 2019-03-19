@@ -1,22 +1,62 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
+import matplotlib.ticker as ticker
 import pandas as pd
 import pylab
-import pickle
+import cPickle as pickle
+import matplotlib.patches as mpatches
+import bams.learners
 
-def plot(df, strategy_name, plot_name):
+
+def plot(df, strategy_name, plot_name, dim):
     print("Graphing results...")
-    plt.figure(figsize=(15, 4))
-    fig = sns.pointplot(x='Trial', y='Probability',
-                        data=df
+    plt.figure(figsize=(5, 4))
+    print strategy_name[0], strategy_name[1]
+    df["Strategy_del"] = strategy_name[0]
+    df2 = df
+    df2["Strategy"] = strategy_name[1]
+    fig = sns.pointplot(x='Trial', y='Probability_x',
+                        data=df, hue="Strategy_del"
                         )
+    fig = sns.pointplot(x='Trial', y='Probability_y',
+                        data=df2, palette="hls", hue="Strategy"
+                        )
+    #leg_handles = fig.get_legend_handles_labels()[0]
+    #fig.legend(['BALD', 'Random'], title='Learner Strategies')
     sns.set_context("notebook", font_scale=1)
     fig.set(ylabel="Posterior Probability")
-    fig.set(xlabel="Trial #")
-    fig.set(title="%s using %s" % (strategy_name, plot_name))
-    for label in fig.xaxis.get_ticklabels()[::2]:
-        label.set_visible(False)
-    pylab.show()
+    fig.set(xlabel="Trial Number")
+    #fig.set(title="%s v %s" % (strategy_name[0], strategy_name[1]))
+    fig.set(title="BAMS on dimension %s" % (dim))
+    xticks = fig.xaxis.get_major_ticks()
+    fig.xaxis.set_major_locator(ticker.MultipleLocator(10))
+    fig.xaxis.set_major_formatter(ticker.ScalarFormatter())
+    plt.xlim(0, None)
+    plt.ylim(0, None)
+    plt.legend(loc='upper left')
+    #plt.savefig("/Users/darpa/Downloads/%s.png" % "BAMS on dimension %s" % (dim))
+    plt.show()
+
+# def plot(df, strategy_name, plot_name2):
+#     print("Graphing results...")
+#     plt.figure(figsize=(7, 4))
+#     fig, ax = plt.subplots()
+#     ax.plot(df['Trial'], df['Probability_x'],
+#                         '-bo', label="BALD"
+#                         )
+#     ax.plot(df['Trial'], df['Probability_y'],
+#                         '-ro', label="Random"
+#                         )
+#     #leg_handles = fig.get_legend_handles_labels()[0]
+#     #fig.legend(['BALD', 'Random'], title='Learner Strategies')
+#     ax.set(ylabel="Posterior Probability")
+#     ax.set(xlabel="Trial")
+#     ax.set(title="%s vs %s" % (strategy_name[0], strategy_name[1]))
+#     plt.legend(loc='upper left')
+#     plt.xlim(0, 50)
+#     plt.ylim(0, None)
+#     ax.legend()
+#     plt.show()
 
 
 def plot_100(model):
@@ -24,25 +64,56 @@ def plot_100(model):
              2. Do model.predict on 0-100 X values
              3. plot this
     """
+    #from bams.models import GPModel, GrammarModels,Model
+    #from bams.learners import ActiveLearner
+    #import bams.learners
+    predictions = []
+    filename = model + ".pkl"
+    with open(filename, 'rb') as f:
+        model = pickle.load(f)
+    """print(filename)
     for i in xrange(1,100):
-        model = pickle.load(open(model, 'rb'))
-        predictions = model.predict()
-    return predictions
+     #   model = pickle.load((open(model+ ".pkl", 'rb')))
+        with open(filename, 'rb') as f:
+            model = pickle.load(f)
+        predictions[i] = model.predict(i)
+    return predictions"""
+    print(model)
+
+def open_trial_data(path, strategy_name):
+    with open(path, 'rb') as f:
+        model = pickle.load(f)
+    model['Predictor'] = 'human'
+    fig = sns.lmplot(x="n_dots", y="guess", data=model, hue="Predictor");
+    sns.set_context("notebook", font_scale=1)
+    fig.set(ylabel="Number of dots predicted")
+    fig.set(xlabel="Number of dots presented")
+    fig.set(title=strategy_name)
+    plt.xlim(0, 100)
+    plt.ylim(0, 100)
+    fig.savefig("/Users/darpa/Downloads/%s.png" % strategy_name)
+    #plt.show()
+
+def predict_from_trials(path):
+    pass
 
 def translate_file(s):
     s = str(s).split()[0]
     translate = s.replace("(", "_").rstrip(',')
     return translate
 
-def transform(pickle):
-    df = pd.read_pickle("%s.pkl" % strategy)
-    # example = {1: 0.014012259115402175, 2: 0.010586020567390508, 3: 0.070410005902961953, 4: 0.065816475737389732, 5: 0.061796272496622742, 6: 0.058218998328712482, 7: 0.055027681609100335, 8: 0.052165106816936604, 9: 0.049583999265996791, 10: 0.047245256172894171, 11: 0.045116550262111407, 12: 0.043170961450528372, 13: 0.041385933650449347, 14: 0.03974244122912219, 15: 0.038222397042778383, 16: 0.03681604865159286, 17: 0.035509363821477707, 18: 0.03429221392687154, 19: 0.033155684547801142, 20: 0.032090499137312531, 21: 0.031092483595154839, 22: 0.030155147403213237, 23: 0.029272645744443545, 24: 0.028440310287794385, 25: 0.027654049843215983, 26: 0.026909789396499701, 27: 0.026205023667561694, 28: 0.025535683697182912, 29: 0.02490017763518234, 30: 0.024295311506569568, 31: 0.023719128912337829, 32: 0.023169637329076512, 33: 0.022645337089835994, 34: 0.022143936557119246, 35: 0.02166425571084064, 36: 0.021204913133697132, 37: 0.020764642167921361, 38: 0.020342279394226982, 39: 0.019936754240742309, 40: 0.019547079648151503, 41: 0.019172344147683828, 42: 0.018811705165993162, 43: 0.01846438176922249, 44: 0.018129650068905916, 45: 0.017806837628315076, 46: 0.017495319051497482, 47: 0.017194511764973924, 48: 0.016903872794889307, 49: 0.016622895168666347, 50: 0.016351105086223491, 51: 0.016088059118251962, 52: 0.015833342095417084, 53: 0.015586564626326321, 54: 0.015347360998596387, 55: 0.015115388187135106, 56: 0.014890323008602387, 57: 0.014671861501209546, 58: 0.014459717161018551, 59: 0.014253620156593261, 60: 0.014053315410616057, 61: 0.013858561984139945, 62: 0.013669132563130739, 63: 0.013484811590952408, 64: 0.013305395068518038, 65: 0.013130690147300715, 66: 0.012960513368896105, 67: 0.012794691035283542, 68: 0.012633058400583314, 69: 0.012475458173566392, 70: 0.012321741722691588, 71: 0.012171767005579141, 72: 0.012025399161009752, 73: 0.011882509634507876, 74: 0.011742975591208302, 75: 0.01160668078003888, 76: 0.011473513294745788, 77: 0.011343366793327196, 78: 0.011216139550206426, 79: 0.011091734711959888, 80: 0.01097005922517522, 81: 0.010851024079179762, 82: 0.010734544565445233, 83: 0.010620539112445105, 84: 0.010508929565915349, 85: 0.010399641586035719, 86: 0.010292603089070516, 87: 0.010187745754044152, 88: 0.010085003026008463, 89: 0.88861227193149717, 90: 0.889713567707764, 91: 0.89079329941842678, 92: 0.89185209458279824, 93: 0.89289055603077983, 94: 0.89390926389273107, 95: 0.89490877672271918, 96: 0.89588963207717442, 97: 0.89685234725545626, 98: 0.89779742090658388, 99: 0.89872533364184037, 100: 0.89963654862063513}
-    # df = pd.DataFrame(example, columns=['Trial', 'Probablity'])
+def get_best_model_and_name(root_path, strategy):
+    pickle_path = root_path + "/" + strategy
+    df = pd.read_pickle("%s.pkl" % pickle_path)
+    print df.tail(1).sort_values
+    df_names = pd.DataFrame({'list_of_models': list(df)})
     plot_name = df[df.iloc[-1:].idxmax(axis=1).iloc[0]].name
     series = df[df.iloc[-1:].idxmax(axis=1).iloc[0]]
     df = series.to_frame(name=None)
     df.columns = ['Probability']
     df['Trial'] = range(1, len(df) + 1)
+    df['Strategy'] = strategy
+    df['Model_name'] = plot_name
     return df, plot_name
 
 def model_predict(plot_path, val):
@@ -50,10 +121,37 @@ def model_predict(plot_path, val):
     model = pickle.load(open(plot_path), 'rb')
     return model.predict(val)
 
-PATH = "all_models"
-strategy = "BALD_2"
-df, plot_name = transform(strategy)
-print plot_name
-plot_path = ("%s/%s/%s") % (PATH, strategy, translate_file(plot_name))
-print model_predict(plot_path, 1)
-#plot(df, strategy, plot_name)
+mapping = {
+            "BALD_1":"5b38c816-8789-4749-8843-eae10283f6e2/", # 200 pool
+            "BALD_2":"448b79b2-b6d3-41a3-9d94-596647fb84c7", # 200 pool
+            "BALD_3":"a9ad42f2-e3e6-453d-a8d2-85200bb15efd", # 200 pool
+            "BALD_All":"25e92109-e50c-40ea-aee7-939d7864bbed", # 200 pool
+            "Random_1":"c7f82681-9701-4675-b6d5-1ae42729f73c", # 200 pool
+            "Random_2":"4a32ce59-0a3e-4cbc-947f-ca52ff682271", # 200 pool
+            "Random_3":"56722bfc-4b17-4bb4-acd3-d0197cfc1590", # 200 pool
+            "Random_All":"ebc78678-538d-44b9-8292-03d397c20b6c", # 200 pool
+            "fake_human_BALD_1": "dummy_oracle/8d2323cf-3292-41cc-8e35-cf1cdefa61f8", #new,
+            "fake_human_random_1": "fake_human/50e384f3-761a-49e4-acaa-a9089ea970fd",
+}
+dim = "1"
+strategies = ["BALD_%s" % str(dim), "Random_%s" % str(dim)]
+BALD_PATH_ROOT = mapping["fake_human_BALD_1"]
+BALD_PATH_ALL = BALD_PATH_ROOT + "/all_models"
+RANDOM_PATH_ROOT = mapping["fake_human_random_1"]
+RANDOM_PATH_ALL = RANDOM_PATH_ROOT + "/all_models"
+
+df1, plot_name1 = get_best_model_and_name(BALD_PATH_ROOT, strategies[0])
+df2, plot_name2 = get_best_model_and_name(RANDOM_PATH_ROOT, strategies[1])
+
+plot_names = [plot_name1, plot_name2]
+merged_df = pd.merge(df1, df2, on='Trial')
+
+#plot_path1 = ("%s/%s/%s") % (BALD_PATH_ALL, strategies[0], translate_file(plot_names[0]))
+#plot_path2 = ("%s/%s/%s") % (RANDOM_PATH_ALL, strategies[1], translate_file(plot_names[1]))
+#print(plot_100(plot_path2)) # This is broken
+#open_trial_data(BALD_PATH_ROOT + "/" + strategies[0] + "_trials.pkl", strategies[0])# This opens trial data
+print("BALD****")
+print(plot_name1)
+print("Random****")
+print(plot_name2)
+plot(merged_df, list(strategies), list(plot_names), dim)
