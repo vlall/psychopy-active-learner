@@ -8,16 +8,9 @@ from bams.query_strategies import (
     RandomStrategy,
 )
 import seaborn as sns; sns.set()
-import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
-import matplotlib.ticker as ticker
-import pylab
-import cPickle as pickle
-import matplotlib.patches as mpatches
-import bams.learners
 
-import numpy as np
 
 NDIM = 1
 POOL_SIZE = 25
@@ -115,35 +108,4 @@ df4.to_pickle(out2)
 #fig = plt.plot(x=[x for x in range(1,100)], y=f2, color="blue")
 
 
-
-
-
-
-
-
-
 sns.set_context("notebook", font_scale=1)
-
-
-
-
-
-
-
-
-#fig, ax = plt.subplots()
-#fig = plt.plot(x=[x for x in range(1,100)], y=f)
-#fig = plt.scatter(x="n_dots", y="guess", data=model)
-# seaborn uncomment
-# leg_handles = fig.get_legend_handles_labels()[0]
-# handles, labels = fig.get_legend_handles_labels()
-# fig.legend(handles=handles[1:], labels=labels[1:])
-# fig.set(ylabel="Number of dots predicted")
-# fig.set(xlabel="Number of dots presented")
-# xticks=fig.xaxis.get_major_ticks()
-# fig.xaxis.set_major_locator(ticker.MultipleLocator(10))
-# fig.xaxis.set_major_formatter(ticker.ScalarFormatter())
-# fig.set(title="Random Learner on Dimension 1")
-# plt.xlim(0, 100)
-# plt.ylim(0, 100)
-# plt.show()
