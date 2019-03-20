@@ -1,6 +1,8 @@
 import random
 from psychopy import visual, event, core
 import time
+
+
 """
 This file runs the dot experiment using the Psychopy Toolbox, which presents
 a uniform distribution of dots across a 500x500 screen. It takes as input the
@@ -9,6 +11,7 @@ active model selection code in `psychopy_learner.py` which manipulates a combina
 in order to converge to the kernel grammar which best describes the relationship between stimuli and
 human behavior.
 """
+
 def get_typed_answer(win, guess):
     instruction_text = visual.TextStim(win, text = u'How many dots did you see?', pos=(0, 100))
     guess.text = ''
@@ -71,4 +74,3 @@ if __name__=="__main__":
     answer_text = visual.TextStim(win)
     guess = run_experiment(win, answer_text, 10, .90)
     print(guess)
-
