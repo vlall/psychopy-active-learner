@@ -13,6 +13,7 @@ import pickle
 import uuid
 import os
 import json
+import sys
 from time import gmtime, strftime
 from six.moves import configparser
 
@@ -79,8 +80,8 @@ def oracle(x):
         contrast = random.random()
     answer_text = visual.TextStim(win)
     guess = dot_experiment.run_experiment(win, answer_text, n_dots, contrast)
-    print(finalData)
     finalData.loc[len(finalData)] = [n_dots, contrast, int(guess), list(x)]
+    print(finalData)
     if guess:
         return float(guess)/100.0
     return 0.0
@@ -109,7 +110,7 @@ if __name__ == "__main__":
         )
     else:
         print("%s is not a valid strategy (choose either BALD or Random). Exiting." % strategy_name)
-        exit()
+        sys.exit()
 
     trial = 0
     threshold = 0.01
