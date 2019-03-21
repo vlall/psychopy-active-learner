@@ -15,32 +15,31 @@ mapping = {
             "Random_1": "f39f200f-bde3-47ac-83c5-c8df6fde9485",  # abbr
 }
 
+title_topic = "Random"
 dim = "1"
 BALD_PATH = "%s/%s/" % ("data", mapping["BALD_1"])
 RANDOM_PATH = "%s/%s/" % ("data", mapping["Random_1"])
-BALD_learner_df = pd.read_pickle(BALD_PATH + "BALD_%s_predictions_all.pkl" % dim)
-random_learner_df = pd.read_pickle(RANDOM_PATH + "Random_%s_predictions_all.pkl" % dim)
-BALD_human = "%s/BALD_%s_trials" % (BALD_PATH, dim)
+bald_predict_df = pd.read_pickle(BALD_PATH + "BALD_%s_predictions_all.pkl" % dim)
+random_predict_df = pd.read_pickle(RANDOM_PATH + "Random_%s_predictions_all.pkl" % dim)
+bald_human = "%s/BALD_%s_trials" % (BALD_PATH, dim)
 random_human = "%s/Random_%s_trials" % (RANDOM_PATH, dim)
-df3 = pd.read_pickle("%s.pkl" % BALD_human)
-df = pd.read_pickle("%s.pkl" % random_human)
-print(df3)
-print(df)
-print(BALD_learner_df)
-print(random_learner_df)
+bald_df = pd.read_pickle("%s.pkl" % bald_human)
+random_df = pd.read_pickle("%s.pkl" % random_human)
+print(bald_predict_df)
+print(random_predict_df)
+print(bald_df)
+print(random_df)
 x = [x for x in range(1,100)]
 
-df['Predictor'] = 'Human'
-df3['Predictor'] = 'Human'
-random_learner_df['Predictor'] = 'Random_Strategy'
-BALD_learner_df ['Predictor'] = 'BALD_Strategy'
+bald_df['Predictor'] = 'Human'
+random_df['Predictor'] = 'Human'
+bald_predict_df ['Predictor'] = 'BALD_Strategy'
+random_predict_df['Predictor'] = 'Random_Strategy'
 
-#fig = sns.scatterplot(x="n_dots", y="guess", data=df, hue="Predictor")
-#fig = sns.pointplot(x="x", y="y", data=random_learner_df, hue="Predictor", palette="hls")
-
-
-fig = sns.scatterplot(x="n_dots", y="guess", data=df3, hue="Predictor")
-fig = sns.pointplot(x="x", y="y", data=BALD_learner_df, hue="Predictor", palette="hls",s=.1)
+fig = sns.scatterplot(x="n_dots", y="guess", data=random_df, hue="Predictor")
+fig = sns.pointplot(x="x", y="y", data=random_predict_df, hue="Predictor", palette="hls")
+#fig = sns.scatterplot(x="n_dots", y="guess", data=bald_df, hue="Predictor")
+#fig = sns.pointplot(x="x", y="y", data=bald_predict_df, hue="Predictor", palette="hls",s=.1)
 
 """
 fig = sns.scatterplot(x="n_dots", y="guess", data=df, )
@@ -67,7 +66,7 @@ fig.set(xlabel="Number of dots presented")
 xticks=fig.xaxis.get_major_ticks()
 fig.xaxis.set_major_locator(ticker.MultipleLocator(10))
 fig.xaxis.set_major_formatter(ticker.ScalarFormatter())
-fig.set(title="Random on %s" % dim)
+fig.set(title="%s on %s" % (title_topic, dim))
 #plt.xlim(0, 100)
 #plt.ylim(0, 100)
 plt.show()

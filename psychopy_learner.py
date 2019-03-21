@@ -58,10 +58,6 @@ def scale_down(threshold, dim):
     out = float(dim/threshold) if threshold else 0.0
     return out
 
-
-def dummy_oracle(x):
-    return x[0]
-
 def oracle(x):
     """Run a psychopy experiment by scaling up the features so they can be used as input.
     Then scale down the output for the active learner."""
@@ -86,6 +82,24 @@ def oracle(x):
         return float(guess)/100.0
     return 0.0
 
+
+def dummy_oracle(x):
+    """Doesn't manipulate data, just records as if it were a real trial."""
+    max_n_dots = 100
+    # Scale up
+    if MANIPULATE=='dots' or MANIPULATE=='all':
+        n_dots = scale_up(max_n_dots, x[0])
+    else:
+        n_dots = scale_up(max_n_dots, random.random())
+    if MANIPULATE=='contrast':
+        contrast = x[0]
+    elif MANIPULATE=='all':
+        contrast = x[1]
+    else:
+        contrast = random.random()
+    finalData.loc[len(finalData)] = [n_dots, contrast, n_dots, list(x)]
+    print(finalData)
+    return x[0]
 
 if __name__ == "__main__":
     strategy_name = NAME.split("_")[0]
@@ -119,7 +133,7 @@ if __name__ == "__main__":
     maxModel = []
     while learner.budget > 0:
         x = learner.next_query()
-        y = learner.query(oracle, x)
+        y = learner.query(dummy_oracle, x)
         learner.update(x, y)
         print(trial)
         posteriors = learner.posteriors

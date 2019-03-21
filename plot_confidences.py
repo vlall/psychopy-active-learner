@@ -81,18 +81,16 @@ def model_predict(plot_path, val):
 
 
 mapping = {
-            #"BALD_1":"5b38c816-8789-4749-8843-eae10283f6e2/", # 200 pool
             "BALD_2":"448b79b2-b6d3-41a3-9d94-596647fb84c7", # 200 pool
             "BALD_3":"a9ad42f2-e3e6-453d-a8d2-85200bb15efd", # 200 pool
             "BALD_All":"25e92109-e50c-40ea-aee7-939d7864bbed", # 200 pool
-            #"Random_1":"c7f82681-9701-4675-b6d5-1ae42729f73c", # 200 pool
             "Random_2":"4a32ce59-0a3e-4cbc-947f-ca52ff682271", # 200 pool
             "Random_3":"56722bfc-4b17-4bb4-acd3-d0197cfc1590", # 200 pool
             "Random_All":"ebc78678-538d-44b9-8292-03d397c20b6c", # 200 pool
-            "fake_human_BALD_1": "dummy_oracle/8d2323cf-3292-41cc-8e35-cf1cdefa61f8", # testing,
-            "fake_human_random_1": "fake_human/50e384f3-761a-49e4-acaa-a9089ea970fd", # testing
-            "BALD_1": "474ed916-5bb4-45f7-ad41-ed8273f3f766", # abbr
-            "Random_1": "f39f200f-bde3-47ac-83c5-c8df6fde9485",# abbr
+            "fake_human_BALD_1": "fake_human/86480bd4-af58-42f3-8582-bdaee9b0b40a", #new,
+            "fake_human_random_1": "fake_human/50e384f3-761a-49e4-acaa-a9089ea970fd",
+            "BALD_1": "9d1f44fb-51ec-4ea1-a022-56c4607111d5",  # abbr
+            "Random_1": "d549103a-e963-4d79-b755-65d1cee29ff7",  # abbr
 }
 dim = "1"
 root = "data/"
