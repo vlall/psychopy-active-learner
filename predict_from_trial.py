@@ -1,6 +1,5 @@
 import bams
 import pandas as pd
-import cPickle as pickle
 from bams.learners import ActiveLearner
 from bams.query_strategies import (
     BALD,
@@ -13,20 +12,22 @@ import seaborn as sns
 import pandas as pd
 import matplotlib.ticker as ticker
 import pylab
-import cPickle as pickle
+import pickle
 import matplotlib.patches as mpatches
 import bams.learners
 import numpy as np
 
 NDIM = 1
-POOL_SIZE = 25
-BUDGET = 50
+POOL_SIZE = 3
+BUDGET = 4
 BASE_KERNELS = ["PER", "LIN", "K"]
-DEPTH = 2
+DEPTH = 1
 
 mapping = {
             "fake_human_BALD_1": "fake_human/86480bd4-af58-42f3-8582-bdaee9b0b40a", #new,
             "fake_human_random_1": "fake_human/50e384f3-761a-49e4-acaa-a9089ea970fd",
+            "BALD_1": "474ed916-5bb4-45f7-ad41-ed8273f3f766",  # abbr
+            "Random_1": "f39f200f-bde3-47ac-83c5-c8df6fde9485",  # abbr
 }
 
 random_learner = ActiveLearner(
@@ -44,15 +45,15 @@ bald_learner = ActiveLearner(
     max_depth=DEPTH,
     ndim=NDIM,
 )
-
-path2 = "%s/BALD_1_trials" % mapping["fake_human_BALD_1"]
-path = "%s/Random_1_trials" % mapping["fake_human_random_1"]
-out2 = "%s/BALD_1_predictions_all.pkl" % mapping["fake_human_BALD_1"]
-out1 = "%s/Random_1_predictions_all.pkl" % mapping["fake_human_random_1"]
+root = "data/"
+path2 = root + "%s/BALD_1_trials" % mapping["BALD_1"]
+path = root + "%s/Random_1_trials" % mapping["Random_1"]
+out2 = root + "%s/BALD_1_predictions_all.pkl" % mapping["BALD_1"]
+out1 = root + "%s/Random_1_predictions_all.pkl" % mapping["Random_1"]
 df3 = pd.read_pickle("%s.pkl" % path2)
 df = pd.read_pickle("%s.pkl" % path)
 x = [x for x in range(1,100)]
-print df3
+print(df3)
 
 # Read the dimiensions and set learner to len(ndim)
 # feed learned the dimensions?
@@ -63,7 +64,7 @@ i=0
 def run_predictions(learner):
     pass
 
-for i in xrange(0,random_learner.budget):
+for i in range(0, len(df3)):
     guess = df3["guess"].loc[i] / 100.0
     correct = df3["n_dots"].loc[i] / 100.0
     random_learner.update(correct, guess)
@@ -72,7 +73,7 @@ for i in xrange(0,random_learner.budget):
     i+=1
 
 f = []
-for dots in xrange(1,100):
+for dots in range(1,100):
     print("Input:" + str(dots))
     output = random_learner.predict([float(dots/100.0)])[0]
     f.append(output[0]*100)
@@ -80,7 +81,7 @@ for dots in xrange(1,100):
 
 i = 0
 # BALD
-for i in xrange(0, bald_learner.budget):
+for i in range(0, len(df)):
     guess = df3["guess"].loc[i] / 100.0
     correct = df3["n_dots"].loc[i] / 100.0
     bald_learner.update(correct, guess)
@@ -88,7 +89,7 @@ for i in xrange(0, bald_learner.budget):
     print(i)
     i+=1
 f2 = []
-for dots in xrange(1,100):
+for dots in range(1,100):
     print("Input:" + str(dots))
     output = bald_learner.predict([float(dots/100.0)])[0]
     f2.append(output[0]*100)
