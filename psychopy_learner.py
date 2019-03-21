@@ -139,7 +139,7 @@ if __name__ == "__main__":
     outputName = PATH + NAME
     df.to_pickle(outputName + '.pkl')
     finalData.to_pickle(outputName + '_trials.pkl')
-    config = {
+    runtime_data = {
         'NAME': NAME,
         "DATE/TIME": strftime("%Y-%m-%d %H:%M:%S", gmtime()),
         "PATH": PATH,
@@ -154,6 +154,6 @@ if __name__ == "__main__":
         "OUTPUT_NAME": outputName,
     }
     with open(outputName + '_runtime.json', 'w') as outfile:
-        json.dump(config, outfile)
+        json.dump(runtime_data, outfile)
     print("****** Finished. Use the following path as input for the plot: ******")
     print(outputName)

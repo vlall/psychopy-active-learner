@@ -49,6 +49,16 @@ fig = sns.scatterplot(x="n_dots", y="guess", data=df3, )
 fig = sns.pointplot(x="x", y="y", data=BALD_learner_df, hue="Predictor", palette="hls",s=.1)
 """
 
+# matplotlib attempt
+#fig = df3.plot(x="n_dots", y="guess", style=".")
+#fig = plt.plot(x=[x for x in range(1,100)], y=f2, color="blue")
+
+#sns.set_context("notebook", font_scale=1)
+
+#fig, ax = plt.subplots()
+#fig = plt.plot(x=[x for x in range(1,100)], y=f)
+#fig = plt.scatter(x="n_dots", y="guess", data=model)
+
 leg_handles = fig.get_legend_handles_labels()[0]
 handles, labels = fig.get_legend_handles_labels()
 fig.legend(handles=handles[1:], labels=labels[1:])
