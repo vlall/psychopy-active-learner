@@ -20,11 +20,12 @@ from time import gmtime, strftime
 finalData = pd.DataFrame(columns=['n_dots', 'contrast', 'guess', 'n_dim'])
 NAME = "BALD_1"
 MANIPULATE = "dots"
-UUID = "dummy_oracle/" + str(uuid.uuid4())
-PATH = UUID + "/"
+DATA_PATH = "data/"
+UUID = str(uuid.uuid4())
+PATH = DATA_PATH + UUID
 NDIM = 1
 POOL_SIZE = 25
-BUDGET = 50
+BUDGET = 2
 BASE_KERNELS = ["PER", "LIN", "K"]
 DEPTH = 2
 win = visual.Window(
@@ -118,7 +119,7 @@ if __name__ == "__main__":
             if learner.budget==1:
                 s = str(model).split()[0]
                 translate = s.replace("(", "_").rstrip(',')
-                make_folder = "%s/all_models/%s" % (UUID, NAME)
+                make_folder = "%s/all_models/%s" % (PATH, NAME)
                 if not os.path.exists(make_folder):
                     os.makedirs(make_folder)
                 filepath = "%s/%s.pkl" % (make_folder, translate)
