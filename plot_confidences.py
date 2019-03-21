@@ -53,6 +53,7 @@ def translate_file(s):
     translate = s.replace("(", "_").rstrip(',')
     return translate
 
+
 def get_best_model_and_name(root_path, strategy):
     pickle_path = root_path + "/" + strategy
     df = pd.read_pickle("%s.pkl" % pickle_path)
@@ -67,10 +68,12 @@ def get_best_model_and_name(root_path, strategy):
     df['Model_name'] = plot_name
     return df, plot_name
 
+
 def model_predict(plot_path, val):
     print(plot_path)
     model = pickle.load(open(plot_path), 'rb')
     return model.predict(val)
+
 
 mapping = {
             "BALD_1":"5b38c816-8789-4749-8843-eae10283f6e2/", # 200 pool
@@ -81,8 +84,8 @@ mapping = {
             "Random_2":"4a32ce59-0a3e-4cbc-947f-ca52ff682271", # 200 pool
             "Random_3":"56722bfc-4b17-4bb4-acd3-d0197cfc1590", # 200 pool
             "Random_All":"ebc78678-538d-44b9-8292-03d397c20b6c", # 200 pool
-            "fake_human_BALD_1": "dummy_oracle/8d2323cf-3292-41cc-8e35-cf1cdefa61f8", #new,
-            "fake_human_random_1": "fake_human/50e384f3-761a-49e4-acaa-a9089ea970fd",
+            "fake_human_BALD_1": "dummy_oracle/8d2323cf-3292-41cc-8e35-cf1cdefa61f8", # testing,
+            "fake_human_random_1": "fake_human/50e384f3-761a-49e4-acaa-a9089ea970fd", # testing
 }
 dim = "1"
 strategies = ["BALD_%s" % str(dim), "Random_%s" % str(dim)]
