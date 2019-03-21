@@ -1,0 +1,11 @@
+[Experiment]
+NAME = "BALD_1"
+MANIPULATE = "dots"
+NDIM = 1
+POOL_SIZE = 25
+BUDGET = 2
+BASE_KERNELS = PER, LIN, K
+DEPTH = 2
+
+[Data]
+DATA_PATH = "data/"

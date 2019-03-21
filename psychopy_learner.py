@@ -1,5 +1,4 @@
 import random
-import math
 import pandas as pd
 from psychopy import visual, event, core
 import dot_experiment
@@ -15,19 +14,29 @@ import uuid
 import os
 import json
 from time import gmtime, strftime
+from six.moves import configparser
 
-# Set active learner parameters
+
+# Read the config file
+configFile = "config.txt"
+parser = configparser.ConfigParser()
+parser.read(configFile)
+configData = {}
+for section in parser.sections():
+    configData.update(dict(parser.items(section)))
+
+# Set the config values
 finalData = pd.DataFrame(columns=['n_dots', 'contrast', 'guess', 'n_dim'])
-NAME = "BALD_1"
-MANIPULATE = "dots"
-DATA_PATH = "data/"
+NAME = configData["name"]
+MANIPULATE = configData["manipulate"]
+NDIM = int(configData["ndim"])
+POOL_SIZE = int(configData["pool_size"])
+BUDGET = int(configData["budget"])
+BASE_KERNELS = list(configData["base_kernels"].split(", "))
+DEPTH = int(configData["depth"])
+DATA_PATH = configData["data_path"]
 UUID = str(uuid.uuid4())
 PATH = DATA_PATH + UUID + "/"
-NDIM = 1
-POOL_SIZE = 25
-BUDGET = 2
-BASE_KERNELS = ["PER", "LIN", "K"]
-DEPTH = 2
 win = visual.Window(
 size=[500, 500],
 units="pix",
