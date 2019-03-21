@@ -57,9 +57,6 @@ def scale_down(threshold, dim):
     out = float(dim/threshold) if threshold else 0.0
     return out
 
-#def fake_human(x):
-#    finalData.loc[len(finalData)] = [int(x[0]*100), random.uniform(.01,.99), int(x[0]*100), list(x)]
-#    return x[0]
 
 def dummy_oracle(x):
     return x[0]
@@ -82,7 +79,6 @@ def oracle(x):
         contrast = random.random()
     answer_text = visual.TextStim(win)
     guess = dot_experiment.run_experiment(win, answer_text, n_dots, contrast)
-    #score = 1 - (abs(float(guess)-float(n_dots)) / float(n_dots))
     print(finalData)
     finalData.loc[len(finalData)] = [n_dots, contrast, int(guess), list(x)]
     if guess:
@@ -92,7 +88,7 @@ def oracle(x):
 
 if __name__ == "__main__":
     strategy_name = NAME.split("_")[0]
-    if strategy_name=="BALD":
+    if strategy_name.lower() == "bald":
         print("Running %s %s" % (strategy_name, str(NDIM)))
         learner = ActiveLearner(
             query_strategy=BALD(pool=HyperCubePool(NDIM, POOL_SIZE)),
@@ -102,7 +98,7 @@ if __name__ == "__main__":
             ndim=NDIM,
         )
 
-    else:
+    elif strategy_name.lower() == "random":
         print("Running %s %s" % (strategy_name, str(NDIM)))
         learner = ActiveLearner(
             query_strategy=RandomStrategy(pool=HyperCubePool(NDIM, POOL_SIZE)),
@@ -111,6 +107,9 @@ if __name__ == "__main__":
             max_depth=DEPTH,
             ndim=NDIM,
         )
+    else:
+        print("%s is not a valid strategy (choose either BALD or Random). Exiting." % strategy_name)
+        exit()
 
     trial = 0
     threshold = 0.01

@@ -2,13 +2,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib.ticker as ticker
 import pandas as pd
-import pylab
 import pickle
-import matplotlib.patches as mpatches
-import bams.learners
 
 
-def plot(df, strategy_name, plot_name, dim):
+def plot(df, strategy_name, plot_name, dim, save_figure=True):
     print("Graphing results...")
     plt.figure(figsize=(5, 4))
     print(strategy_name[0], strategy_name[1])
@@ -18,67 +15,23 @@ def plot(df, strategy_name, plot_name, dim):
     fig = sns.pointplot(x='Trial', y='Probability_x',
                         data=df, hue="Strategy_del"
                         )
-    fig = sns.pointplot(x='Trial', y='Probability_y',
-                        data=df2, palette="hls", hue="Strategy"
+    sns.pointplot(x='Trial', y='Probability_y',
+                    data=df2, palette="hls", hue="Strategy"
                         )
-    #leg_handles = fig.get_legend_handles_labels()[0]
-    #fig.legend(['BALD', 'Random'], title='Learner Strategies')
     sns.set_context("notebook", font_scale=1)
     fig.set(ylabel="Posterior Probability")
     fig.set(xlabel="Trial Number")
-    #fig.set(title="%s v %s" % (strategy_name[0], strategy_name[1]))
     fig.set(title="BAMS on dimension %s" % (dim))
-    xticks = fig.xaxis.get_major_ticks()
+    fig.xaxis.get_major_ticks()
     fig.xaxis.set_major_locator(ticker.MultipleLocator(10))
     fig.xaxis.set_major_formatter(ticker.ScalarFormatter())
     plt.xlim(0, None)
     plt.ylim(0, None)
     plt.legend(loc='upper left')
-    #plt.savefig("/Users/darpa/Downloads/%s.png" % "BAMS on dimension %s" % (dim))
+    if save_figure == True:
+        plt.savefig("/Users/darpa/Downloads/%s.png" % "BAMS on dimension %s" % (dim))
     plt.show()
 
-# def plot(df, strategy_name, plot_name2):
-#     print("Graphing results...")
-#     plt.figure(figsize=(7, 4))
-#     fig, ax = plt.subplots()
-#     ax.plot(df['Trial'], df['Probability_x'],
-#                         '-bo', label="BALD"
-#                         )
-#     ax.plot(df['Trial'], df['Probability_y'],
-#                         '-ro', label="Random"
-#                         )
-#     #leg_handles = fig.get_legend_handles_labels()[0]
-#     #fig.legend(['BALD', 'Random'], title='Learner Strategies')
-#     ax.set(ylabel="Posterior Probability")
-#     ax.set(xlabel="Trial")
-#     ax.set(title="%s vs %s" % (strategy_name[0], strategy_name[1]))
-#     plt.legend(loc='upper left')
-#     plt.xlim(0, 50)
-#     plt.ylim(0, None)
-#     ax.legend()
-#     plt.show()
-
-
-def plot_100(model):
-    """TODO: 1. Save each model as a pickle.
-             2. Do model.predict on 0-100 X values
-             3. plot this
-    """
-    #from bams.models import GPModel, GrammarModels,Model
-    #from bams.learners import ActiveLearner
-    #import bams.learners
-    predictions = []
-    filename = model + ".pkl"
-    with open(filename, 'rb') as f:
-        model = pickle.load(f)
-    """print(filename)
-    for i in xrange(1,100):
-     #   model = pickle.load((open(model+ ".pkl", 'rb')))
-        with open(filename, 'rb') as f:
-            model = pickle.load(f)
-        predictions[i] = model.predict(i)
-    return predictions"""
-    print(model)
 
 def open_trial_data(path, strategy_name):
     with open(path, 'rb') as f:
@@ -94,8 +47,6 @@ def open_trial_data(path, strategy_name):
     fig.savefig("/Users/darpa/Downloads/%s.png" % strategy_name)
     #plt.show()
 
-def predict_from_trials(path):
-    pass
 
 def translate_file(s):
     s = str(s).split()[0]
@@ -148,8 +99,7 @@ merged_df = pd.merge(df1, df2, on='Trial')
 
 #plot_path1 = ("%s/%s/%s") % (BALD_PATH_ALL, strategies[0], translate_file(plot_names[0]))
 #plot_path2 = ("%s/%s/%s") % (RANDOM_PATH_ALL, strategies[1], translate_file(plot_names[1]))
-#print(plot_100(plot_path2)) # This is broken
-#open_trial_data(BALD_PATH_ROOT + "/" + strategies[0] + "_trials.pkl", strategies[0])# This opens trial data
+open_trial_data(BALD_PATH_ROOT + "/" + strategies[0] + "_trials.pkl", strategies[0])# This opens trial data
 print("BALD****")
 print(plot_name1)
 print("Random****")
