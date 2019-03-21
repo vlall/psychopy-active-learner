@@ -3,7 +3,7 @@ import seaborn as sns
 import matplotlib.ticker as ticker
 import pandas as pd
 import pylab
-import cPickle as pickle
+import pickle
 import matplotlib.patches as mpatches
 import bams.learners
 
@@ -11,7 +11,7 @@ import bams.learners
 def plot(df, strategy_name, plot_name, dim):
     print("Graphing results...")
     plt.figure(figsize=(5, 4))
-    print strategy_name[0], strategy_name[1]
+    print(strategy_name[0], strategy_name[1])
     df["Strategy_del"] = strategy_name[0]
     df2 = df
     df2["Strategy"] = strategy_name[1]
@@ -105,7 +105,7 @@ def translate_file(s):
 def get_best_model_and_name(root_path, strategy):
     pickle_path = root_path + "/" + strategy
     df = pd.read_pickle("%s.pkl" % pickle_path)
-    print df.tail(1).sort_values
+    print(df.tail(1).sort_values)
     df_names = pd.DataFrame({'list_of_models': list(df)})
     plot_name = df[df.iloc[-1:].idxmax(axis=1).iloc[0]].name
     series = df[df.iloc[-1:].idxmax(axis=1).iloc[0]]

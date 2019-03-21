@@ -22,7 +22,7 @@ NAME = "BALD_1"
 MANIPULATE = "dots"
 DATA_PATH = "data/"
 UUID = str(uuid.uuid4())
-PATH = DATA_PATH + UUID
+PATH = DATA_PATH + UUID + "/"
 NDIM = 1
 POOL_SIZE = 25
 BUDGET = 2
@@ -148,4 +148,3 @@ if __name__ == "__main__":
         json.dump(config, outfile)
     print("****** Finished. Use the following path as input for the plot: ******")
     print(outputName)
-    print("\n")
