@@ -36,8 +36,6 @@ BUDGET = int(configData["budget"])
 BASE_KERNELS = list(configData["base_kernels"].split(", "))
 DEPTH = int(configData["depth"])
 DATA_PATH = configData["data_path"]
-UUID = str(uuid.uuid4())
-PATH = DATA_PATH + UUID + "/"
 win = visual.Window(
 size=[500, 500],
 units="pix",
@@ -103,6 +101,8 @@ def dummy_oracle(x):
 
 
 def run_learner_on_experiment(strategy):
+    UUID = str(uuid.uuid4())
+    PATH = DATA_PATH + UUID + "/"
     strategy_name = NAME.split("_")[0]
     if strategy_name.lower() == "bald":
         print("Running %s %s" % (strategy_name, str(NDIM)))
@@ -177,6 +177,6 @@ def run_learner_on_experiment(strategy):
 json_uuid = {}
 strategies = ["BALD_1", "Random_1"]
 for strategy in strategies:
-    uuid = run_learner_on_experiment(strategy)
-    json_uuid[strategy] = uuid
+    val = run_learner_on_experiment(strategy)
+    json_uuid[strategy] = val
 print(json_uuid)

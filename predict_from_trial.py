@@ -88,22 +88,36 @@ x = [x for x in range(1,100)]
 print(bald_df)
 print(random_df)
 
-# Training and Predictions
+# Training
 train_learner(bald_learner, bald_df, bald_likelihood, bald_linear)
 train_learner(random_learner, random_df, random_likelihood, random_linear)
+
+# Predictions
 bald_prediction_100 = run_predictions(bald_learner)
 random_prediction_100 = run_predictions(random_learner)
 
+# Transform prediction data
+#save_bald = pd.DataFrame(data={"x":x,"y":bald_prediction_100})
+#save_bald['Predictor'] = 'BALD Strategy'
+#save_random = pd.DataFrame(data={"x":x,"y":random_prediction_100})
+#save_random['Predictor'] = 'RANDOM_Strategy'
 
-# Prepare data
-save_bald = pd.DataFrame(data={"x":x,"y":bald_prediction_100})
-save_bald['Predictor'] = 'BALD Strategy'
-save_random = pd.DataFrame(data={"x":x,"y":random_prediction_100})
-save_random['Predictor'] = 'RANDOM_Strategy'
+# Save likelihoods of models
+likelihood_out = root + "/likelihood-pickle.pkl"
+print(random_linear)
+print(random_likelihood)
+print(bald_linear)
+print(bald_likelihood)
+likelihood_df = pd.DataFrame(
+    {'Random_Linear': random_linear,
+     'Random_Likelihood': random_likelihood,
+     'BALD_Linear': bald_linear,
+     'BALD_Likelihood': bald_likelihood,
+     })
+likelihood_df.to_pickle(likelihood_out)
 
-print(bald_prediction_100)
-print(random_prediction_100)
-
-# Save predictions
-save_bald.to_pickle(bald_out)
-save_random.to_pickle(random_out)
+#Print/Save Predictions
+#print(bald_prediction_100)
+#print(random_prediction_100)
+#save_bald.to_pickle(bald_out)
+#save_random.to_pickle(random_out)
