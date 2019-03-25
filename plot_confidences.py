@@ -87,10 +87,8 @@ mapping = {
             "Random_2":"4a32ce59-0a3e-4cbc-947f-ca52ff682271", # 200 pool
             "Random_3":"56722bfc-4b17-4bb4-acd3-d0197cfc1590", # 200 pool
             "Random_All":"ebc78678-538d-44b9-8292-03d397c20b6c", # 200 pool
-            "fake_human_BALD_1": "fake_human/86480bd4-af58-42f3-8582-bdaee9b0b40a", #new,
-            "fake_human_random_1": "fake_human/50e384f3-761a-49e4-acaa-a9089ea970fd",
-            "BALD_1": "9d1f44fb-51ec-4ea1-a022-56c4607111d5",  # abbr
-            "Random_1": "d549103a-e963-4d79-b755-65d1cee29ff7",  # abbr
+            "BALD_1": "6b18151d-b50b-4d10-bd1a-058d50f30748",  # abbr
+            "Random_1": "9c702a06-ce75-4b1a-b853-e76ad16c2377",  # abbr
 }
 dim = "1"
 root = "data/"
@@ -113,4 +111,4 @@ print("BALD****")
 print(plot_name1)
 print("Random****")
 print(plot_name2)
-plot(merged_df, list(strategies), list(plot_names), dim)
+plot(merged_df, list(strategies), list(plot_names), dim, save_figure=False)

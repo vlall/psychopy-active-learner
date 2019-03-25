@@ -9,16 +9,16 @@ import pandas as pd
 
 
 NDIM = 1
-POOL_SIZE = 3
-BUDGET = 4
+POOL_SIZE = 200
+BUDGET = 50
 BASE_KERNELS = ["PER", "LIN", "K"]
-DEPTH = 1
+DEPTH = 2
 
 mapping = {
             "fake_human_BALD_1": "fake_human/86480bd4-af58-42f3-8582-bdaee9b0b40a", #new,
             "fake_human_random_1": "fake_human/50e384f3-761a-49e4-acaa-a9089ea970fd",
-            "BALD_1": "9d1f44fb-51ec-4ea1-a022-56c4607111d5",  # abbr
-            "Random_1": "d549103a-e963-4d79-b755-65d1cee29ff7",  # abbr
+            "BALD_1": "6b18151d-b50b-4d10-bd1a-058d50f30748",  # abbr
+            "Random_1": "9c702a06-ce75-4b1a-b853-e76ad16c2377",  # abbr
 }
 
 random_learner = ActiveLearner(
@@ -37,14 +37,30 @@ bald_learner = ActiveLearner(
     ndim=NDIM,
 )
 
+bald_likelihood = []
+random_likelihood = []
+bald_linear = []
+random_linear = []
 
-def train_learner(learner, df):
+def train_learner(learner, df, winning_likelihood, linear_likelihood):
+    print("There are %d models." % len(df))
     for i in range(0, len(df)):
+        searchTerm = "LinearKernel"
+        for model in learner.models:
+            if str(model).split("(")[0] == searchTerm:
+                linear = model
+                break
+        #linear_list.append(linear.log_likelihood())
         guess = df["guess"].loc[i] / 100.0
         correct = df["n_dots"].loc[i] / 100.0
         learner.update(correct, guess)
-        print(correct, guess)
         print(i)
+        winning_likelihood.append(learner.map_model.log_likelihood())
+        print(learner.map_model)
+        print(learner.map_model.log_likelihood())
+        print(linear)
+        print(linear.log_likelihood())
+        linear_likelihood.append(linear.log_likelihood())
     return True
 
 
@@ -56,6 +72,7 @@ def run_predictions(learner):
         print(output)
         prediction_100.append(output[0] * 100)
     return (prediction_100)
+
 
 root = "data/"
 BALD_PATH = root + "%s/BALD_1_trials" % mapping["BALD_1"]
@@ -72,10 +89,11 @@ print(bald_df)
 print(random_df)
 
 # Training and Predictions
-train_learner(bald_learner, bald_df)
-train_learner(random_learner, random_df)
+train_learner(bald_learner, bald_df, bald_likelihood, bald_linear)
+train_learner(random_learner, random_df, random_likelihood, random_linear)
 bald_prediction_100 = run_predictions(bald_learner)
 random_prediction_100 = run_predictions(random_learner)
+
 
 # Prepare data
 save_bald = pd.DataFrame(data={"x":x,"y":bald_prediction_100})

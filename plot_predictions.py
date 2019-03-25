@@ -11,11 +11,11 @@ import numpy as np
 mapping = {
             "fake_human_BALD_1": "fake_human/86480bd4-af58-42f3-8582-bdaee9b0b40a", #new,
             "fake_human_random_1": "fake_human/50e384f3-761a-49e4-acaa-a9089ea970fd",
-            "BALD_1": "474ed916-5bb4-45f7-ad41-ed8273f3f766",  # abbr
-            "Random_1": "f39f200f-bde3-47ac-83c5-c8df6fde9485",  # abbr
+            "BALD_1": "6b18151d-b50b-4d10-bd1a-058d50f30748",  # abbr
+            "Random_1": "9c702a06-ce75-4b1a-b853-e76ad16c2377",  # abbr
 }
 
-title_topic = "Random"
+title = "BALD"
 dim = "1"
 BALD_PATH = "%s/%s/" % ("data", mapping["BALD_1"])
 RANDOM_PATH = "%s/%s/" % ("data", mapping["Random_1"])
@@ -36,10 +36,13 @@ random_df['Predictor'] = 'Human'
 bald_predict_df ['Predictor'] = 'BALD_Strategy'
 random_predict_df['Predictor'] = 'Random_Strategy'
 
-fig = sns.scatterplot(x="n_dots", y="guess", data=random_df, hue="Predictor")
-fig = sns.pointplot(x="x", y="y", data=random_predict_df, hue="Predictor", palette="hls")
-#fig = sns.scatterplot(x="n_dots", y="guess", data=bald_df, hue="Predictor")
-#fig = sns.pointplot(x="x", y="y", data=bald_predict_df, hue="Predictor", palette="hls",s=.1)
+if title.lower() == "random":
+    fig = sns.scatterplot(x="n_dots", y="guess", data=random_df, hue="Predictor")
+    fig = sns.pointplot(x="x", y="y", data=random_predict_df, hue="Predictor", palette="hls")
+
+elif title.lower() ==  "bald":
+    fig = sns.scatterplot(x="n_dots", y="guess", data=bald_df, hue="Predictor")
+    fig = sns.pointplot(x="x", y="y", data=bald_predict_df, hue="Predictor", palette="hls",s=.1)
 
 """
 fig = sns.scatterplot(x="n_dots", y="guess", data=df, )
@@ -66,7 +69,7 @@ fig.set(xlabel="Number of dots presented")
 xticks=fig.xaxis.get_major_ticks()
 fig.xaxis.set_major_locator(ticker.MultipleLocator(10))
 fig.xaxis.set_major_formatter(ticker.ScalarFormatter())
-fig.set(title="%s on %s" % (title_topic, dim))
+fig.set(title="%s on %s" % (title, dim))
 #plt.xlim(0, 100)
 #plt.ylim(0, 100)
 plt.show()

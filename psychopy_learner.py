@@ -101,7 +101,8 @@ def dummy_oracle(x):
     print(finalData)
     return x[0]
 
-if __name__ == "__main__":
+
+def run_learner_on_experiment(strategy):
     strategy_name = NAME.split("_")[0]
     if strategy_name.lower() == "bald":
         print("Running %s %s" % (strategy_name, str(NDIM)))
@@ -171,3 +172,11 @@ if __name__ == "__main__":
         json.dump(runtime_data, outfile)
     print("****** Finished. Use the following path as input for the plot: ******")
     print(outputName)
+    return(UUID)
+
+json_uuid = {}
+strategies = ["BALD_1", "Random_1"]
+for strategy in strategies:
+    uuid = run_learner_on_experiment(strategy)
+    json_uuid[strategy] = uuid
+print(json_uuid)
