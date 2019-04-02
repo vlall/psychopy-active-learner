@@ -41,16 +41,22 @@ bald_likelihood = []
 random_likelihood = []
 bald_linear = []
 random_linear = []
+bald_constant = []
+random_constant = []
 
-def train_learner(learner, df, winning_likelihood, linear_likelihood):
+def train_learner(learner, df, winning_likelihood, linear_likelihood, constant_likelihood):
     print("There are %d models." % len(df))
     for i in range(0, len(df)):
-        searchTerm = "LinearKernel"
+        lineTerm = "LinearKernel"
+        constantTerm = "ConstantKernel"
         for model in learner.models:
-            if str(model).split("(")[0] == searchTerm:
+            splitTerm = str(model).split("(")[0]
+            if "+" in splitTerm or "*" in splitTerm:
+                continue
+            elif splitTerm == lineTerm:
                 linear = model
-                break
-        #linear_list.append(linear.log_likelihood())
+            elif splitTerm == constantTerm:
+                constant = model
         guess = df["guess"].loc[i] / 100.0
         correct = df["n_dots"].loc[i] / 100.0
         learner.update(correct, guess)
@@ -60,7 +66,11 @@ def train_learner(learner, df, winning_likelihood, linear_likelihood):
         print(learner.map_model.log_likelihood())
         print(linear)
         print(linear.log_likelihood())
+        print(constant)
+        print(constant.log_likelihood())
+        print(learner.map_model.entropy(1))
         linear_likelihood.append(linear.log_likelihood())
+        constant_likelihood.append(constant.log_likelihood())
     return True
 
 
@@ -89,12 +99,12 @@ print(bald_df)
 print(random_df)
 
 # Training
-train_learner(bald_learner, bald_df, bald_likelihood, bald_linear)
-train_learner(random_learner, random_df, random_likelihood, random_linear)
+train_learner(bald_learner, bald_df, bald_likelihood, bald_linear, bald_constant)
+train_learner(random_learner, random_df, random_likelihood, random_linear, random_constant)
 
 # Predictions
-bald_prediction_100 = run_predictions(bald_learner)
-random_prediction_100 = run_predictions(random_learner)
+#bald_prediction_100 = run_predictions(bald_learner)
+#random_prediction_100 = run_predictions(random_learner)
 
 # Transform prediction data
 #save_bald = pd.DataFrame(data={"x":x,"y":bald_prediction_100})
@@ -113,6 +123,8 @@ likelihood_df = pd.DataFrame(
      'Random_Likelihood': random_likelihood,
      'BALD_Linear': bald_linear,
      'BALD_Likelihood': bald_likelihood,
+     'BALD_constant': bald_constant,
+     'Random_constant': random_constant,
      })
 likelihood_df.to_pickle(likelihood_out)
 

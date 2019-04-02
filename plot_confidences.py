@@ -3,7 +3,7 @@ import seaborn as sns
 import matplotlib.ticker as ticker
 import pandas as pd
 import pickle
-
+import sys
 
 def plot(df, strategy_name, plot_name, dim, save_figure=False):
     print("Graphing results...")
@@ -73,13 +73,20 @@ def get_best_model_and_name(root_path, strategy):
     df['Model_name'] = plot_name
     return df, plot_name
 
+def plot_top_5_models(root_path, strategy):
+    pickle_path = root_path + "/" + strategy
+    df = pd.read_pickle("%s.pkl" % pickle_path)
+    print(df.tail(1).sort_values)
+    df_names = pd.DataFrame({'list_of_models': list(df)})
+    series = df[df.iloc[-1:].idxmax(axis=1)]
+    print(df[df.columns])
 
 def model_predict(plot_path, val):
     print(plot_path)
     model = pickle.load(open(plot_path), 'rb')
     return model.predict(val)
 
-
+"""
 mapping = {
             "BALD_2":"448b79b2-b6d3-41a3-9d94-596647fb84c7", # 200 pool
             "BALD_3":"a9ad42f2-e3e6-453d-a8d2-85200bb15efd", # 200 pool
@@ -89,17 +96,26 @@ mapping = {
             "Random_All":"ebc78678-538d-44b9-8292-03d397c20b6c", # 200 pool
             "BALD_1": "6b18151d-b50b-4d10-bd1a-058d50f30748",  # abbr
             "Random_1": "9c702a06-ce75-4b1a-b853-e76ad16c2377",  # abbr
+}"""
+
+mapping = {#'BALD_1': 'f09fa72b-d2af-477d-b3f6-c2e4f3df8161', 'Random_1': '130e0343-64b7-4587-b8f5-1d2afe824c19',
+           #'BALD_3':'79f2f60f-adb0-4539-bfd1-c40c92eeb81f','Random_3': 'b5d39ac5-5273-4771-8628-32395eb0e097',
+'Random_1': '8bb1ebf4-80be-449e-90ec-d9099f92d600',
+'BALD_1': '19b965ed-5d8f-4e7b-b53b-77a985dae1d8'
 }
+
 dim = "1"
 root = "data/"
 strategies = ["BALD_%s" % str(dim), "Random_%s" % str(dim)]
-BALD_PATH_ROOT = root + mapping["BALD_1"]
+BALD_PATH_ROOT = root + mapping["BALD_" + dim]
 BALD_PATH_ALL = BALD_PATH_ROOT + "/all_models"
-RANDOM_PATH_ROOT = root + mapping["Random_1"]
+RANDOM_PATH_ROOT = root + mapping["Random_" + dim]
 RANDOM_PATH_ALL = RANDOM_PATH_ROOT + "/all_models"
 
 df1, plot_name1 = get_best_model_and_name(BALD_PATH_ROOT, strategies[0])
 df2, plot_name2 = get_best_model_and_name(RANDOM_PATH_ROOT, strategies[1])
+#plot_top_5_models(BALD_PATH_ROOT, strategies[0])
+#sys.exit()
 
 plot_names = [plot_name1, plot_name2]
 merged_df = pd.merge(df1, df2, on='Trial')
@@ -107,8 +123,9 @@ merged_df = pd.merge(df1, df2, on='Trial')
 #plot_path1 = ("%s/%s/%s") % (BALD_PATH_ALL, strategies[0], translate_file(plot_names[0]))
 #plot_path2 = ("%s/%s/%s") % (RANDOM_PATH_ALL, strategies[1], translate_file(plot_names[1]))
 #open_trial_data(BALD_PATH_ROOT + "/" + strategies[0] + "_trials.pkl", strategies[0])# This opens trial data
-print("BALD****")
+print("BALD %s converges to" % dim)
 print(plot_name1)
-print("Random****")
+print("Random %s converges to" % dim)
 print(plot_name2)
 plot(merged_df, list(strategies), list(plot_names), dim, save_figure=False)
+

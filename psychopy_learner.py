@@ -1,7 +1,5 @@
 import random
 import pandas as pd
-from psychopy import visual, event, core
-import dot_experiment
 from bams.learners import ActiveLearner
 from bams.query_strategies import (
     BALD,
@@ -16,7 +14,8 @@ import json
 import sys
 from time import gmtime, strftime
 from six.moves import configparser
-
+from psychopy import visual, event, core
+import dot_experiment
 
 # Read the config file
 configFile = "config.txt"
@@ -25,10 +24,10 @@ parser.read(configFile)
 configData = {}
 for section in parser.sections():
     configData.update(dict(parser.items(section)))
+print(configData)
 
 # Set the config values
 finalData = pd.DataFrame(columns=['n_dots', 'contrast', 'guess', 'n_dim'])
-NAME = configData["name"]
 MANIPULATE = configData["manipulate"]
 NDIM = int(configData["ndim"])
 POOL_SIZE = int(configData["pool_size"])
@@ -103,9 +102,9 @@ def dummy_oracle(x):
 def run_learner_on_experiment(strategy):
     UUID = str(uuid.uuid4())
     PATH = DATA_PATH + UUID + "/"
-    strategy_name = NAME.split("_")[0]
-    if strategy_name.lower() == "bald":
-        print("Running %s %s" % (strategy_name, str(NDIM)))
+    NAME = "%s_%s" % (strategy, NDIM)
+    if strategy.lower() == "bald":
+        print("Running %s %s" % (strategy, str(NDIM)))
         learner = ActiveLearner(
             query_strategy=BALD(pool=HyperCubePool(NDIM, POOL_SIZE)),
             budget=BUDGET,
@@ -114,8 +113,8 @@ def run_learner_on_experiment(strategy):
             ndim=NDIM,
         )
 
-    elif strategy_name.lower() == "random":
-        print("Running %s %s" % (strategy_name, str(NDIM)))
+    elif strategy.lower() == "random":
+        print("Running %s %s" % (strategy, str(NDIM)))
         learner = ActiveLearner(
             query_strategy=RandomStrategy(pool=HyperCubePool(NDIM, POOL_SIZE)),
             budget=BUDGET,
@@ -124,7 +123,7 @@ def run_learner_on_experiment(strategy):
             ndim=NDIM,
         )
     else:
-        print("%s is not a valid strategy (choose either BALD or Random). Exiting." % strategy_name)
+        print("%s is not a valid strategy (choose either BALD or Random). Exiting." % strategy)
         sys.exit()
 
     trial = 0
@@ -134,7 +133,7 @@ def run_learner_on_experiment(strategy):
     maxModel = []
     while learner.budget > 0:
         x = learner.next_query()
-        y = learner.query(dummy_oracle, x)
+        y = learner.query(oracle, x)
         learner.update(x, y)
         print(trial)
         posteriors = learner.posteriors
@@ -175,7 +174,8 @@ def run_learner_on_experiment(strategy):
     return(UUID)
 
 json_uuid = {}
-strategies = ["BALD_1", "Random_1"]
+# strategy = NAME.split("_")[0]
+strategies = ["Random"]
 for strategy in strategies:
     val = run_learner_on_experiment(strategy)
     json_uuid[strategy] = val
