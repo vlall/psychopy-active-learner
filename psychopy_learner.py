@@ -36,11 +36,11 @@ BUDGET = int(configData["budget"])
 BASE_KERNELS = list(configData["base_kernels"].split(", "))
 DEPTH = int(configData["depth"])
 DATA_PATH = configData["data_path"]
-win = visual.Window(
-size=[500, 500],
-units="pix",
-fullscr=False
-)
+#win = visual.Window(
+#size=[500, 500],
+#units="pix",
+#fullscr=False
+#)
 
 
 def scale_up(threshold, dim):
@@ -100,28 +100,28 @@ def dummy_oracle(x):
     return scale_down(max_n_dots, n_dots)
 
 
-def run_learner_on_experiment(strategy, NDIM):
+def run_learner_on_experiment(strategy, dim):
     UUID = str(uuid.uuid4())
     PATH = DATA_PATH + UUID + "/"
-    NAME = "%s_%s" % (strategy, NDIM)
+    NAME = "%s_%s" % (strategy, dim)
     if strategy.lower() == "bald":
-        print("Running %s %s" % (strategy, str(NDIM)))
+        print("Running %s %s" % (strategy, str(dim)))
         learner = ActiveLearner(
-            query_strategy=BALD(pool=HyperCubePool(NDIM, POOL_SIZE)),
+            query_strategy=BALD(pool=HyperCubePool(dim, POOL_SIZE)),
             budget=BUDGET,
             base_kernels=BASE_KERNELS,
             max_depth=DEPTH,
-            ndim=NDIM,
+            ndim=dim,
         )
 
     elif strategy.lower() == "random":
-        print("Running %s %s" % (strategy, str(NDIM)))
+        print("Running %s %s" % (strategy, str(dim)))
         learner = ActiveLearner(
-            query_strategy=RandomStrategy(pool=HyperCubePool(NDIM, POOL_SIZE)),
+            query_strategy=RandomStrategy(pool=HyperCubePool(dim, POOL_SIZE)),
             budget=BUDGET,
             base_kernels=BASE_KERNELS,
             max_depth=DEPTH,
-            ndim=NDIM,
+            ndim=dim,
         )
     else:
         print("%s is not a valid strategy (choose either BALD or Random). Exiting." % strategy)
@@ -156,7 +156,7 @@ def run_learner_on_experiment(strategy, NDIM):
         "PATH": PATH,
         "NAME": NAME,
         "UUID": UUID,
-        "NDIM": NDIM,
+        "NDIM": dim,
         "MANIPULATE": MANIPULATE,
         "POOL_SIZE": POOL_SIZE,
         "BUDGET": BUDGET,
@@ -171,7 +171,7 @@ def run_learner_on_experiment(strategy, NDIM):
     return(UUID)
 
 json_uuid = {}
-strategies = ["BALD"]
+strategies = ["BALD", "Random"]
 # strategy = NAME.split("_")[0]
 for strategy in strategies:
     val = run_learner_on_experiment(strategy, NDIM)
