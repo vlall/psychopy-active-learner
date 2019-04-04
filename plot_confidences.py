@@ -100,8 +100,8 @@ mapping = {
 
 mapping = {#'BALD_1': 'f09fa72b-d2af-477d-b3f6-c2e4f3df8161', 'Random_1': '130e0343-64b7-4587-b8f5-1d2afe824c19',
            #'BALD_3':'79f2f60f-adb0-4539-bfd1-c40c92eeb81f','Random_3': 'b5d39ac5-5273-4771-8628-32395eb0e097',
-'Random_1': '8bb1ebf4-80be-449e-90ec-d9099f92d600',
-'BALD_1': '19b965ed-5d8f-4e7b-b53b-77a985dae1d8'
+'BALD_1': 'd7631603-cd45-4445-b4b0-a145740dcaba',
+'Random_1': '455869b5-615f-43e3-a8e9-c742bd730021'
 }
 
 dim = "1"

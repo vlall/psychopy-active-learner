@@ -29,17 +29,16 @@ print(configData)
 # Set the config values
 finalData = pd.DataFrame(columns=['n_dots', 'contrast', 'guess', 'n_dim'])
 MANIPULATE = configData["manipulate"]
-NDIM = int(configData["ndim"])
 POOL_SIZE = int(configData["pool_size"])
 BUDGET = int(configData["budget"])
 BASE_KERNELS = list(configData["base_kernels"].split(", "))
 DEPTH = int(configData["depth"])
 DATA_PATH = configData["data_path"]
-win = visual.Window(
-size=[500, 500],
-units="pix",
-fullscr=False
-)
+#win = visual.Window(
+#size=[500, 500],
+#units="pix",
+#fullscr=False
+#)
 
 
 def scale_up(threshold, dim):
@@ -96,10 +95,41 @@ def dummy_oracle(x):
         contrast = random.random()
     finalData.loc[len(finalData)] = [n_dots, contrast, n_dots, list(x)]
     print(finalData)
-    return x[0]
+    return scale_down(max_n_dots, n_dots)
 
 
-def run_learner_on_experiment(strategy):
+def fake_human(x):
+    done = False
+    max_n_dots = 100
+    # Scale up
+    if MANIPULATE=='dots' or MANIPULATE=='all':
+        n_dots = scale_up(max_n_dots, x[0])
+    else:
+        n_dots = scale_up(max_n_dots, random.random())
+    if MANIPULATE=='contrast':
+        contrast = x[0]
+    elif MANIPULATE=='all':
+        contrast = x[1]
+    else:
+        contrast = random.random()
+    if contrast < .02:
+        answer = 0
+    elif n_dots <= 12:
+        answer = n_dots
+    # Between 0-25% error on normal distribution when n_dots > 12
+    while not done:
+        marginal_error = random.uniform(0.8, 1.2)
+        answer = n_dots * marginal_error
+        if answer > 0 and answer < 100:
+            done = True
+    finalData.loc[len(finalData)] = [n_dots, contrast, int(answer), list(x)]
+    print(finalData)
+    print(scale_down(max_n_dots, answer))
+    return scale_down(max_n_dots, answer)
+
+
+
+def run_learner_on_experiment(strategy, NDIM):
     UUID = str(uuid.uuid4())
     PATH = DATA_PATH + UUID + "/"
     NAME = "%s_%s" % (strategy, NDIM)
@@ -133,7 +163,7 @@ def run_learner_on_experiment(strategy):
     maxModel = []
     while learner.budget > 0:
         x = learner.next_query()
-        y = learner.query(oracle, x)
+        y = learner.query(dummy_oracle, x)
         learner.update(x, y)
         print(trial)
         posteriors = learner.posteriors
@@ -175,8 +205,15 @@ def run_learner_on_experiment(strategy):
 
 json_uuid = {}
 # strategy = NAME.split("_")[0]
+# NDIM = int(configData["ndim"])
+
 strategies = ["Random"]
+# strategies = ["BALD", "Random"]
+# dims = ["1", "2", "3", "all"]
+# for dim in dims:
 for strategy in strategies:
-    val = run_learner_on_experiment(strategy)
+    val = run_learner_on_experiment(strategy, 1)
     json_uuid[strategy] = val
+    # Empty Dataframe for next strategy
+    finalData = finalData[0:0]
 print(json_uuid)
