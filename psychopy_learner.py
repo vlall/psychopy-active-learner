@@ -36,11 +36,6 @@ BUDGET = int(configData["budget"])
 BASE_KERNELS = list(configData["base_kernels"].split(", "))
 DEPTH = int(configData["depth"])
 DATA_PATH = configData["data_path"]
-#win = visual.Window(
-#size=[500, 500],
-#units="pix",
-#fullscr=False
-#)
 
 
 def scale_up(threshold, dim):
@@ -130,7 +125,7 @@ def run_learner_on_experiment(strategy, dim):
     posteriorMatrix = np.zeros((BUDGET, len(learner.models)))
     while learner.budget > 0:
         x = learner.next_query()
-        y = learner.query(dummy_oracle, x)
+        y = learner.query(oracle, x)
         learner.update(x, y)
         print(trial)
         posteriors = learner.posteriors
@@ -170,9 +165,18 @@ def run_learner_on_experiment(strategy, dim):
     print(outputName)
     return(UUID)
 
+
 json_uuid = {}
 strategies = ["BALD", "Random"]
-# strategy = NAME.split("_")[0]
+human = True
+if human:
+    win = visual.Window(
+    size=[500, 500],
+    units="pix",
+    fullscr=False
+    )
+else:
+    oracle = dummy_oracle
 for strategy in strategies:
     val = run_learner_on_experiment(strategy, NDIM)
     json_uuid[strategy] = val
