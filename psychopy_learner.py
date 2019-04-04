@@ -168,7 +168,7 @@ def run_learner_on_experiment(strategy, dim):
 
 json_uuid = {}
 strategies = ["BALD", "Random"]
-human = True
+human = False
 if human:
     win = visual.Window(
     size=[500, 500],
