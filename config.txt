@@ -1,5 +1,5 @@
 [Experiment]
-MANIPULATE = BALD
+MANIPULATE = dots
 NDIM = 1
 POOL_SIZE = 200
 BUDGET = 2
