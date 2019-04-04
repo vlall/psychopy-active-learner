@@ -34,16 +34,16 @@ BUDGET = int(configData["budget"])
 BASE_KERNELS = list(configData["base_kernels"].split(", "))
 DEPTH = int(configData["depth"])
 DATA_PATH = configData["data_path"]
-#win = visual.Window(
-#size=[500, 500],
-#units="pix",
-#fullscr=False
-#)
+win = visual.Window(
+size=[500, 500],
+units="pix",
+fullscr=False
+)
 
 
 def scale_up(threshold, dim):
     """Rescale up to actual values"""
-    out = int(dim * threshold)
+    out = int(round(dim) * threshold)
     if out == 0:
         return 1
     return out
@@ -51,7 +51,7 @@ def scale_up(threshold, dim):
 
 def scale_down(threshold, dim):
     """Rescale 0 <= output <= 1"""
-    out = float(dim/threshold) if threshold else 0.0
+    out = float(dim/float(threshold)) if threshold else 0.0
     return out
 
 def oracle(x):
@@ -80,7 +80,7 @@ def oracle(x):
 
 
 def dummy_oracle(x):
-    """Doesn't manipulate data, just records as if it were a real trial."""
+    """Doesn't manipulate numerosity data, just records as if it were a real trial."""
     max_n_dots = 100
     # Scale up
     if MANIPULATE=='dots' or MANIPULATE=='all':
@@ -96,37 +96,6 @@ def dummy_oracle(x):
     finalData.loc[len(finalData)] = [n_dots, contrast, n_dots, list(x)]
     print(finalData)
     return scale_down(max_n_dots, n_dots)
-
-
-def fake_human(x):
-    done = False
-    max_n_dots = 100
-    # Scale up
-    if MANIPULATE=='dots' or MANIPULATE=='all':
-        n_dots = scale_up(max_n_dots, x[0])
-    else:
-        n_dots = scale_up(max_n_dots, random.random())
-    if MANIPULATE=='contrast':
-        contrast = x[0]
-    elif MANIPULATE=='all':
-        contrast = x[1]
-    else:
-        contrast = random.random()
-    if contrast < .02:
-        answer = 0
-    elif n_dots <= 12:
-        answer = n_dots
-    # Between 0-25% error on normal distribution when n_dots > 12
-    while not done:
-        marginal_error = random.uniform(0.8, 1.2)
-        answer = n_dots * marginal_error
-        if answer > 0 and answer < 100:
-            done = True
-    finalData.loc[len(finalData)] = [n_dots, contrast, int(answer), list(x)]
-    print(finalData)
-    print(scale_down(max_n_dots, answer))
-    return scale_down(max_n_dots, answer)
-
 
 
 def run_learner_on_experiment(strategy, NDIM):
@@ -155,12 +124,8 @@ def run_learner_on_experiment(strategy, NDIM):
     else:
         print("%s is not a valid strategy (choose either BALD or Random). Exiting." % strategy)
         sys.exit()
-
     trial = 0
-    threshold = 0.01
-    outterDict = {}
     posteriorMatrix = np.zeros((BUDGET, len(learner.models)))
-    maxModel = []
     while learner.budget > 0:
         x = learner.next_query()
         y = learner.query(dummy_oracle, x)
@@ -204,15 +169,11 @@ def run_learner_on_experiment(strategy, NDIM):
     return(UUID)
 
 json_uuid = {}
+NDIM = int(configData["ndim"])
+strategies = ["BALD"]
 # strategy = NAME.split("_")[0]
-# NDIM = int(configData["ndim"])
-
-strategies = ["Random"]
-# strategies = ["BALD", "Random"]
-# dims = ["1", "2", "3", "all"]
-# for dim in dims:
 for strategy in strategies:
-    val = run_learner_on_experiment(strategy, 1)
+    val = run_learner_on_experiment(strategy, NDIM)
     json_uuid[strategy] = val
     # Empty Dataframe for next strategy
     finalData = finalData[0:0]

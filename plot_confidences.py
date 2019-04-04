@@ -3,7 +3,7 @@ import seaborn as sns
 import matplotlib.ticker as ticker
 import pandas as pd
 import pickle
-import sys
+
 
 def plot(df, strategy_name, plot_name, dim, save_figure=False):
     print("Graphing results...")
@@ -86,30 +86,24 @@ def model_predict(plot_path, val):
     model = pickle.load(open(plot_path), 'rb')
     return model.predict(val)
 
-"""
+
 mapping = {
+            "BALD_1": "6b18151d-b50b-4d10-bd1a-058d50f30748",  # 200 pool
+            "Random_1": "9c702a06-ce75-4b1a-b853-e76ad16c2377",  # 200 pool
             "BALD_2":"448b79b2-b6d3-41a3-9d94-596647fb84c7", # 200 pool
             "BALD_3":"a9ad42f2-e3e6-453d-a8d2-85200bb15efd", # 200 pool
             "BALD_All":"25e92109-e50c-40ea-aee7-939d7864bbed", # 200 pool
             "Random_2":"4a32ce59-0a3e-4cbc-947f-ca52ff682271", # 200 pool
             "Random_3":"56722bfc-4b17-4bb4-acd3-d0197cfc1590", # 200 pool
             "Random_All":"ebc78678-538d-44b9-8292-03d397c20b6c", # 200 pool
-            "BALD_1": "6b18151d-b50b-4d10-bd1a-058d50f30748",  # abbr
-            "Random_1": "9c702a06-ce75-4b1a-b853-e76ad16c2377",  # abbr
-}"""
-
-mapping = {#'BALD_1': 'f09fa72b-d2af-477d-b3f6-c2e4f3df8161', 'Random_1': '130e0343-64b7-4587-b8f5-1d2afe824c19',
-           #'BALD_3':'79f2f60f-adb0-4539-bfd1-c40c92eeb81f','Random_3': 'b5d39ac5-5273-4771-8628-32395eb0e097',
-'BALD_1': 'd7631603-cd45-4445-b4b0-a145740dcaba',
-'Random_1': '455869b5-615f-43e3-a8e9-c742bd730021'
 }
 
-dim = "1"
+dim = 1
 root = "data/"
 strategies = ["BALD_%s" % str(dim), "Random_%s" % str(dim)]
-BALD_PATH_ROOT = root + mapping["BALD_" + dim]
+BALD_PATH_ROOT = root + mapping["BALD_" + str(dim)]
 BALD_PATH_ALL = BALD_PATH_ROOT + "/all_models"
-RANDOM_PATH_ROOT = root + mapping["Random_" + dim]
+RANDOM_PATH_ROOT = root + mapping["Random_" + str(dim)]
 RANDOM_PATH_ALL = RANDOM_PATH_ROOT + "/all_models"
 
 df1, plot_name1 = get_best_model_and_name(BALD_PATH_ROOT, strategies[0])
@@ -123,9 +117,9 @@ merged_df = pd.merge(df1, df2, on='Trial')
 #plot_path1 = ("%s/%s/%s") % (BALD_PATH_ALL, strategies[0], translate_file(plot_names[0]))
 #plot_path2 = ("%s/%s/%s") % (RANDOM_PATH_ALL, strategies[1], translate_file(plot_names[1]))
 #open_trial_data(BALD_PATH_ROOT + "/" + strategies[0] + "_trials.pkl", strategies[0])# This opens trial data
-print("BALD %s converges to" % dim)
+print("BALD %s converges to" % str(dim))
 print(plot_name1)
-print("Random %s converges to" % dim)
+print("Random %s converges to" % str(dim))
 print(plot_name2)
-plot(merged_df, list(strategies), list(plot_names), dim, save_figure=False)
+plot(merged_df, list(strategies), list(plot_names), str(dim), save_figure=False)
 

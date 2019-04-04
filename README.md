@@ -7,3 +7,11 @@ in order to converge to the kernel grammar with the highest confidence. This gra
 
 After the experiment is run to completion using the configured hyper-parameters, the experiment generates a `data/` folder along with a UUID used to denote the specific experiment data generated. This is used as input into the analysis scripts for interpretting the data.
  
+To test, make sure you have BAMS installed (https://github.com/Dallinger/bams)
+
+Run:
+
+`pip install -r requirements.txt`
+
+Make sure `config.txt` has the proper values, then run the experiment using
+`python psychopy_learner.py`
