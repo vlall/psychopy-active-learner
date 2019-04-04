@@ -43,10 +43,10 @@ fullscr=False
 
 def scale_up(threshold, dim):
     """Rescale up to actual values"""
-    out = int(round(dim) * threshold)
+    out = round(round(dim) * threshold)
     if out == 0:
         return 1
-    return out
+    return int(out)
 
 
 def scale_down(threshold, dim):
