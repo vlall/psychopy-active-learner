@@ -17,6 +17,7 @@ from six.moves import configparser
 from psychopy import visual, event, core
 import dot_experiment
 
+
 # Read the config file
 configFile = "config.txt"
 parser = configparser.ConfigParser()
@@ -27,6 +28,7 @@ for section in parser.sections():
 print(configData)
 
 # Set the config values
+NDIM = int(configData["ndim"])
 finalData = pd.DataFrame(columns=['n_dots', 'contrast', 'guess', 'n_dim'])
 MANIPULATE = configData["manipulate"]
 POOL_SIZE = int(configData["pool_size"])
@@ -169,7 +171,6 @@ def run_learner_on_experiment(strategy, NDIM):
     return(UUID)
 
 json_uuid = {}
-NDIM = int(configData["ndim"])
 strategies = ["BALD"]
 # strategy = NAME.split("_")[0]
 for strategy in strategies:
