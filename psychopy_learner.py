@@ -40,7 +40,7 @@ DATA_PATH = configData["data_path"]
 
 def scale_up(threshold, dim):
     """Rescale up to actual values"""
-    out = round(round(dim) * threshold)
+    out = round(dim * threshold)
     if out == 0:
         return 1
     return int(out)
