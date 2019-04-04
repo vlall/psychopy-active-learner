@@ -78,7 +78,7 @@ def plot_top_5_models(root_path, strategy):
     df = pd.read_pickle("%s.pkl" % pickle_path)
     print(df.tail(1).sort_values)
     df_names = pd.DataFrame({'list_of_models': list(df)})
-    series = df[df.iloc[-1:].idxmax(axis=1)]
+    series = df[df.iloc[-5:].idxmax(axis=1)]
     print(df[df.columns])
 
 def model_predict(plot_path, val):
