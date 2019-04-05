@@ -192,7 +192,7 @@ for manipulation, dim in MANIPULATIONS.items():
         # Clear data for next strategy
         finalData = finalData[0:0]
 
-# Generate and dump a mapping to the experiment's data.
+# Generate and dump mappings of the experimental data.
 mapId = 'mapping_%s.json' % str(uuid.uuid4())[:4]
 if not os.path.exists("mappings"):
     os.makedirs("mappings")
