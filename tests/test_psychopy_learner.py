@@ -16,18 +16,18 @@ from six.moves import configparser
 import unittest
 
 
-class test_psychopy_learner(unittest.TestCase):
+class TestPsychopyLearner(object):
 
 
-    configFile = "../config.txt"
+    configFile = "config.txt"
     strategies = ["BALD", "Random"]
-    mapId = "../mappings/mapping_example.json"
+    mapId = "mappings/mapping_example.json"
     with open(mapId) as json_file:
         mapping_example = json.load(json_file)
     manipulations = {"dots": 1, "contrast": 1, "random" :1 , "all": 3}
     dim = 1
     manipulate = "dots"
-    root = "../data/"
+    root = "data/"
     strategies = ["BALD_%s" % manipulate, "Random_%s" % manipulate]
     BALD_PATH_ROOT = root + mapping_example["BALD_" + manipulate]
     BALD_PATH_ALL = BALD_PATH_ROOT + "/all_models"
@@ -36,7 +36,7 @@ class test_psychopy_learner(unittest.TestCase):
     trialData = ['n_dots', 'contrast', 'guess', 'n_dim']
 
 
-    def test_config_keys():
+    def test_config_keys(self):
         parser = configparser.ConfigParser()
         parser.read(configFile)
         configData = {}
@@ -46,12 +46,12 @@ class test_psychopy_learner(unittest.TestCase):
         assert set(keys).issubset(configData.keys())
 
 
-    def test_run_learner_on_experiment():
+    def test_run_learner_on_experiment(self):
         mapping_output = run_learner_on_experiment(strategy, dim, manipulation)
         assert os.path.isfile("mappings/%s" % mapping_output)
 
 
-    def test_bald_path():
+    def test_bald_path(self):
         random_df = pd.read_pickle("%s.pkl" % BALD_PATH_ROOT)
         assert(len(random_df)>0)
 
