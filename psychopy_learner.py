@@ -186,6 +186,9 @@ for manipulation, dim in manipulations.items():
         # Clear data for next strategy
         finalData = finalData[0:0]
 mapId = 'mapping_%s.json' % str(uuid.uuid4())[:4]
-with open(mapId, 'w') as map:
+if not os.path.exists("mappings"):
+    os.makedirs("mappings")
+mapPath = "mappings/%s" % (mapId)
+with open(mapPath, 'w') as map:
     json.dump(json_uuid, map)
-print("%s was saved to %s " % (json_uuid, mapId))
+print("Your metadata was saved to mappings/%s " % (mapId))

@@ -23,7 +23,7 @@ def plot(df, strategy_name, plot_name, dim, save_figure=False):
     sns.set_context("notebook", font_scale=1)
     fig.set(ylabel="Posterior Probability")
     fig.set(xlabel="Trial Number")
-    fig.set(title="BAMS on dimension %s" % (dim))
+    fig.set(title="BAMS on %s dimension manipulating %s" % (dim, manipulate))
     fig.xaxis.get_major_ticks()
     fig.xaxis.set_major_locator(ticker.MultipleLocator(1))
     fig.xaxis.set_major_formatter(ticker.ScalarFormatter())
@@ -90,8 +90,8 @@ def model_predict(plot_path, val):
     return model.predict(val)
 
 
-mapId = "mapping_fed0"
-with open(mapId + ".json") as json_file:
+mapId = "mapping_2d99"
+with open("mappings/%s.json" % mapId) as json_file:
     mapping = json.load(json_file)
 
 dim = 1
