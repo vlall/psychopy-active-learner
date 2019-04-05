@@ -13,56 +13,71 @@ import uuid
 import os
 import json
 import sys
-from time import gmtime, strftime
 from six.moves import configparser
 import unittest
 
 
-class TestStringMethods(unittest.TestCase):
+class test_psychopy_learner(unittest.TestCase):
 
 
-    mapping = "../mappings/mapping_example.json"
     configFile = "../config.txt"
+    strategies = ["BALD", "Random"]
+    manipulations = {"dots": 1, "contrast": 1, "random" :1 , "all": 3}
+    dim = 1
+    manipulate = "dots"
+    root = "../data/"
+    strategies = ["BALD_%s" % manipulate, "Random_%s" % manipulate]
+    BALD_PATH_ROOT = root + mapping["BALD_" + manipulate]
+    BALD_PATH_ALL = BALD_PATH_ROOT + "/all_models"
+    RANDOM_PATH_ROOT = root + mapping["Random_" + manipulate]
+    RANDOM_PATH_ALL = RANDOM_PATH_ROOT + "/all_models"
+    trialData = ['n_dots', 'contrast', 'guess', 'n_dim']
 
 
-    def test_config_exists():
+    def test_example_config_exists():
         assert os.path.isfile(configFile)
 
-    def test_read_config():
+
+    def test_example_mapping_exists():
+        mapId = "../mappings/mapping_example.json"
+        with open(mapId) as json_file:
+            mapping_example = json.load(json_file)
+
+
+    def test_config_keys():
         parser = configparser.ConfigParser()
         parser.read(configFile)
         configData = {}
         for section in parser.sections():
             configData.update(dict(parser.items(section)))
-        assert os.path.isfile(configData)
+        keys = ["POOL", "BUDGET", "BASE_KERNELS", "DEPTH", "DATA_PATH"]
+        assert set(keys).issubset(configData.keys())
 
 
-    def test_set_config_values():
-        # Set the config values
-        finalData = pd.DataFrame(columns=['n_dots', 'contrast', 'guess', 'n_dim'])
-        POOL_SIZE = 200
-        BUDGET = 1
-        BASE_KERNELS = [E]
-        DEPTH = 1
-        DATA_PATH = configData["data_path"]
+    def test_run_learner_on_experiment():
+        mapping_output = run_learner_on_experiment(strategy, dim, manipulation)
+        assert os.path.isfile("mappings/%s" % mapping_output)
 
 
-    def test_outputfiles():
-        random_df = pd.read_pickle("%s.pkl" % RANDOM_PATH)
+    def test_bald_path():
+        random_df = pd.read_pickle("%s.pkl" % BALD_PATH_ROOT)
         assert(len(random_df)>0)
 
 
-    def test_config_parser():
-        pass
+    def test_random_path():
+        random_df = pd.read_pickle("%s.pkl" % RANDOM_PATH_ROOT)
+        assert(len(random_df)>0)
 
 
     def test_dummy_oracle():
         dummy = dummy_oracle(0.49)
         self.assertEqual(scaled, 0.49)
 
+
     def test_scale_up():
         scaled = scale_up(100, 0.99)
         self.assertEqual(scaled, 99)
+
 
     def test_scale_down():
         scaled = scale_down(100, 99)
