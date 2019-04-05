@@ -18,6 +18,7 @@ matrix:
       - TOXENV=py37
 
 install:
+    - apt install freeglut-devel
     - git clone https://github.com/Dallinger/bams.git
     - pip install -r bams/requirements.txt
     - python bams/setup.py install
