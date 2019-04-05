@@ -22,27 +22,20 @@ class test_psychopy_learner(unittest.TestCase):
 
     configFile = "../config.txt"
     strategies = ["BALD", "Random"]
+    mapId = "../mappings/mapping_example.json"
+    with open(mapId) as json_file:
+        mapping_example = json.load(json_file)
     manipulations = {"dots": 1, "contrast": 1, "random" :1 , "all": 3}
     dim = 1
     manipulate = "dots"
     root = "../data/"
     strategies = ["BALD_%s" % manipulate, "Random_%s" % manipulate]
-    BALD_PATH_ROOT = root + mapping["BALD_" + manipulate]
+    BALD_PATH_ROOT = root + mapping_example["BALD_" + manipulate]
     BALD_PATH_ALL = BALD_PATH_ROOT + "/all_models"
-    RANDOM_PATH_ROOT = root + mapping["Random_" + manipulate]
+    RANDOM_PATH_ROOT = root + mapping_example["Random_" + manipulate]
     RANDOM_PATH_ALL = RANDOM_PATH_ROOT + "/all_models"
     trialData = ['n_dots', 'contrast', 'guess', 'n_dim']
-
-
-    def test_example_config_exists():
-        assert os.path.isfile(configFile)
-
-
-    def test_example_mapping_exists():
-        mapId = "../mappings/mapping_example.json"
-        with open(mapId) as json_file:
-            mapping_example = json.load(json_file)
-
+  
 
     def test_config_keys():
         parser = configparser.ConfigParser()
