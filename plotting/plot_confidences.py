@@ -91,12 +91,12 @@ def model_predict(plot_path, val):
 
 
 mapId = "mapping_2d99"
-with open("mappings/%s.json" % mapId) as json_file:
+with open("../mappings/%s.json" % mapId) as json_file:
     mapping = json.load(json_file)
 
 dim = 1
 manipulate = "dots"
-root = "data/"
+root = "../data/"
 strategies = ["BALD_%s" % manipulate, "Random_%s" % manipulate]
 BALD_PATH_ROOT = root + mapping["BALD_" + manipulate]
 BALD_PATH_ALL = BALD_PATH_ROOT + "/all_models"
