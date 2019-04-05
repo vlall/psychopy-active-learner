@@ -1,6 +1,6 @@
 # Psychopy Active Learner
 
-https://travis-ci.com/vlall/psychopy-active-learner.svg?token=u4sdN1vvyVBZq3MUz13n&branch=master
+[![Build Status](https://travis-ci.com/vlall/psychopy-active-learner.svg?token=u4sdN1vvyVBZq3MUz13n&branch=master)](https://travis-ci.com/vlall/psychopy-active-learner)
 
 This project runs a basic numerosity experiment using the Psychopy Toolbox, which presents
 a uniform distribution of 0<=x<=100 dots across a 500x500 window. Hyper parameters are set in the `config.txt`. The `dot_experiment.py` file takes as input the `n_dots` being pressented and the `contrast` of those dots. During each trial of presentation, the Bayesian
