@@ -1,8 +1,6 @@
 [Experiment]
-MANIPULATE = dots
-NDIM = 1
 POOL_SIZE = 200
-BUDGET = 50
+BUDGET = 3
 BASE_KERNELS = PER, LIN, K, LG
 DEPTH = 2
 
