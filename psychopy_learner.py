@@ -168,8 +168,7 @@ def run_learner_on_experiment(strategy, dim, manipulation):
 
 json_uuid = {}
 strategies = ["BALD", "Random"]
-#manipulations = {"dots": 1, "contrast": 1, "random" :1 , "all": 3}
-manipulations = {"dots": 1}
+manipulations = {"dots": 1, "contrast": 1, "random" :1 , "all": 3}
 human = False
 if human:
     win = visual.Window(

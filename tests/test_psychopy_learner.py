@@ -25,14 +25,16 @@ class TestStringMethods(unittest.TestCase):
     configFile = "../config.txt"
 
 
+    def test_config_exists():
+        assert os.path.isfile(configFile)
+
     def test_read_config():
-        # Read the config file
         parser = configparser.ConfigParser()
         parser.read(configFile)
         configData = {}
         for section in parser.sections():
             configData.update(dict(parser.items(section)))
-        print(configData)
+        assert os.path.isfile(configData)
 
 
     def test_set_config_values():
