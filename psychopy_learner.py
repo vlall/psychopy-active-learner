@@ -156,15 +156,15 @@ for section in parser.sections():
     configData.update(dict(parser.items(section)))
 
 # Set the config values
+json_uuid = {}
 finalData = pd.DataFrame(columns=['n_dots', 'contrast', 'guess', 'n_dim'])
 POOL_SIZE = int(configData["pool_size"])
 BUDGET = int(configData["budget"])
 BASE_KERNELS = list(configData["base_kernels"].split(", "))
 DEPTH = int(configData["depth"])
 DATA_PATH = configData["data_path"]
-json_uuid = {}
 STRATEGIES = list(configData["strategies"].split(", "))
-MANIPULATIONS = {"dots": 1, "contrast": 1, "random": 1, "all": 3}
+MANIPULATIONS = json.loads((configData["manipulations"]))
 HUMAN = str(configData["human"])
 if HUMAN == 'True':
     win = visual.Window(
