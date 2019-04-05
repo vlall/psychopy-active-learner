@@ -31,7 +31,7 @@ def plot(df, strategy_name, plot_name, dim, save_figure=False):
     plt.ylim(0, None)
     plt.legend(loc='upper left')
     if save_figure == True:
-        plt.savefig("/Users/darpa/Downloads/%s.png" % "BAMS on dimension %s" % (dim))
+        plt.savefig("%s.png" % "BAMS on dimension %s" % (dim))
     else:
         plt.show()
 
@@ -49,7 +49,7 @@ def open_trial_data(path, strategy_name, save_figure=False):
     plt.xlim(0, 100)
     plt.ylim(0, 100)
     if save_figure == True:
-        fig.savefig("/Users/darpa/Downloads/%s.png" % strategy_name)
+        fig.savefig("%s.png" % strategy_name)
     else:
         plt.show()
 
@@ -90,7 +90,7 @@ def model_predict(plot_path, val):
     return model.predict(val)
 
 
-mapId = "mapping_2d99"
+mapId = "mapping_example"
 with open("../mappings/%s.json" % mapId) as json_file:
     mapping = json.load(json_file)
 
