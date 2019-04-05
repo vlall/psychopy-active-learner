@@ -18,25 +18,6 @@ from psychopy import visual, event, core
 import dot_experiment
 
 
-# Read the config file
-configFile = "config.txt"
-parser = configparser.ConfigParser()
-parser.read(configFile)
-configData = {}
-for section in parser.sections():
-    configData.update(dict(parser.items(section)))
-print(configData)
-
-
-# Set the config values
-finalData = pd.DataFrame(columns=['n_dots', 'contrast', 'guess', 'n_dim'])
-POOL_SIZE = int(configData["pool_size"])
-BUDGET = int(configData["budget"])
-BASE_KERNELS = list(configData["base_kernels"].split(", "))
-DEPTH = int(configData["depth"])
-DATA_PATH = configData["data_path"]
-
-
 def scale_up(threshold, dim):
     """Rescale up to actual values"""
     out = round(dim * threshold)
@@ -47,7 +28,7 @@ def scale_up(threshold, dim):
 
 def scale_down(threshold, dim):
     """Rescale 0 <= output <= 1"""
-    out = float(dim/float(threshold)) if threshold else 0.0
+    out = float(dim / float(threshold)) if threshold else 0.0
     return out
 
 
@@ -56,14 +37,14 @@ def oracle(x):
     Then scale down the output for the active learner."""
     max_n_dots = 100
     # Scale up
-    if manipulation=='dots' or manipulation=='all':
+    if manipulation == 'dots' or manipulation == 'all':
         n_dots = scale_up(max_n_dots, x[0])
     else:
         n_dots = scale_up(max_n_dots, random.random())
     # No need to scale contrast
-    if manipulation=='contrast':
+    if manipulation == 'contrast':
         contrast = x[0]
-    elif manipulation=='all':
+    elif manipulation == 'all':
         contrast = x[1]
     else:
         contrast = random.random()
@@ -72,7 +53,7 @@ def oracle(x):
     finalData.loc[len(finalData)] = [n_dots, contrast, int(guess), list(x)]
     print(finalData)
     if guess:
-        return float(guess)/100.0
+        return float(guess) / 100.0
     return 0.0
 
 
@@ -80,13 +61,13 @@ def dummy_oracle(x):
     """Doesn't manipulate numerosity data, just records as if it were a real trial."""
     max_n_dots = 100
     # Scale up
-    if manipulation=='dots' or manipulation=='all':
+    if manipulation == 'dots' or manipulation == 'all':
         n_dots = scale_up(max_n_dots, x[0])
     else:
         n_dots = scale_up(max_n_dots, random.random())
-    if manipulation=='contrast':
+    if manipulation == 'contrast':
         contrast = x[0]
-    elif manipulation=='all':
+    elif manipulation == 'all':
         contrast = x[1]
     else:
         contrast = random.random()
@@ -131,7 +112,7 @@ def run_learner_on_experiment(strategy, dim, manipulation):
         posteriors = learner.posteriors
         for i, model in enumerate(learner.models):
             posteriorMatrix[trial, i] = posteriors[i]
-            if learner.budget==1:
+            if learner.budget == 1:
                 s = str(model).split()[0]
                 translate = s.replace("(", "_").rstrip(',')
                 make_folder = "%s/all_models/%s" % (PATH, NAME)
@@ -140,7 +121,7 @@ def run_learner_on_experiment(strategy, dim, manipulation):
                 filepath = "%s/%s.pkl" % (make_folder, translate)
                 with open(filepath, 'wb') as f:
                     pickle.dump(model, f)
-        trial+=1
+        trial += 1
     df = pd.DataFrame(posteriorMatrix, columns=[str(i) for i in learner.models])
     outputName = PATH + NAME
     df.to_pickle(outputName + '.pkl')
@@ -163,23 +144,38 @@ def run_learner_on_experiment(strategy, dim, manipulation):
         json.dump(runtime_data, outfile)
     print("****** Finished. Use the following path as input for the plot: ******")
     print(outputName)
-    return(UUID)
+    return (UUID)
 
 
+# Read the config file
+configFile = "config.txt"
+parser = configparser.ConfigParser()
+parser.read(configFile)
+configData = {}
+for section in parser.sections():
+    configData.update(dict(parser.items(section)))
+
+# Set the config values
+finalData = pd.DataFrame(columns=['n_dots', 'contrast', 'guess', 'n_dim'])
+POOL_SIZE = int(configData["pool_size"])
+BUDGET = int(configData["budget"])
+BASE_KERNELS = list(configData["base_kernels"].split(", "))
+DEPTH = int(configData["depth"])
+DATA_PATH = configData["data_path"]
 json_uuid = {}
-strategies = ["BALD", "Random"]
-manipulations = {"dots": 1, "contrast": 1, "random" :1 , "all": 3}
-human = False
-if human:
+STRATEGIES = list(configData["strategies"].split(", "))
+MANIPULATIONS = {"dots": 1, "contrast": 1, "random": 1, "all": 3}
+HUMAN = str(configData["human"])
+if HUMAN == 'True':
     win = visual.Window(
-    size=[500, 500],
-    units="pix",
-    fullscr=False
+        size=[500, 500],
+        units="pix",
+        fullscr=False
     )
 else:
     oracle = dummy_oracle
-for manipulation, dim in manipulations.items():
-    for strategy in strategies:
+for manipulation, dim in MANIPULATIONS.items():
+    for strategy in STRATEGIES:
         val = run_learner_on_experiment(strategy, dim, manipulation)
         json_uuid['%s_%s' % (strategy, manipulation)] = val
         # Clear data for next strategy

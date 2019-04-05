@@ -35,7 +35,7 @@ class test_psychopy_learner(unittest.TestCase):
     RANDOM_PATH_ROOT = root + mapping_example["Random_" + manipulate]
     RANDOM_PATH_ALL = RANDOM_PATH_ROOT + "/all_models"
     trialData = ['n_dots', 'contrast', 'guess', 'n_dim']
-  
+
 
     def test_config_keys():
         parser = configparser.ConfigParser()
