@@ -33,8 +33,10 @@ def scale_down(threshold, dim):
 
 
 def oracle(x):
-    """Run a psychopy experiment by scaling up the features so they can be used as input.
-    Then scale down the output for the active learner."""
+    """
+    Run a psychopy experiment by scaling up the features so they can be used as input.
+    Then scale down the output for the active learner.
+    """
     max_n_dots = 100
     # Scale up
     if manipulation == 'dots' or manipulation == 'all':
@@ -58,7 +60,10 @@ def oracle(x):
 
 
 def dummy_oracle(x):
-    """Doesn't manipulate numerosity data, just records as if it were a real trial."""
+    """
+    The oracle usually manipulates the dimension(s) in x based on prior information.
+    This dummy oracle does not manipulate any dimensions, it simply returns the dots displayed
+    """
     max_n_dots = 100
     # Scale up
     if manipulation == 'dots' or manipulation == 'all':
@@ -156,8 +161,6 @@ for section in parser.sections():
     configData.update(dict(parser.items(section)))
 
 # Set the config values
-json_uuid = {}
-finalData = pd.DataFrame(columns=['n_dots', 'contrast', 'guess', 'n_dim'])
 POOL_SIZE = int(configData["pool_size"])
 BUDGET = int(configData["budget"])
 BASE_KERNELS = list(configData["base_kernels"].split(", "))
@@ -166,6 +169,12 @@ DATA_PATH = configData["data_path"]
 STRATEGIES = list(configData["strategies"].split(", "))
 MANIPULATIONS = json.loads((configData["manipulations"]))
 HUMAN = str(configData["human"])
+
+# Initialize data structures
+json_uuid = {}
+finalData = pd.DataFrame(columns=['n_dots', 'contrast', 'guess', 'n_dim'])
+
+# Check if we need to load a psychopy window
 if HUMAN == 'True':
     win = visual.Window(
         size=[500, 500],
@@ -174,12 +183,16 @@ if HUMAN == 'True':
     )
 else:
     oracle = dummy_oracle
+
+# Experiment matrix (manipulations x strategies). See config.txt for these settings
 for manipulation, dim in MANIPULATIONS.items():
     for strategy in STRATEGIES:
         val = run_learner_on_experiment(strategy, dim, manipulation)
         json_uuid['%s_%s' % (strategy, manipulation)] = val
         # Clear data for next strategy
         finalData = finalData[0:0]
+
+# Generate and dump a mapping to the experiment's data.
 mapId = 'mapping_%s.json' % str(uuid.uuid4())[:4]
 if not os.path.exists("mappings"):
     os.makedirs("mappings")
