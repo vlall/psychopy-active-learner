@@ -43,9 +43,9 @@ class TestPsychopyLearner(object):
         configData = {}
         for section in parser.sections():
             configData.update(dict(parser.items(section)))
-        keys = ["pool_size", "budget", "base_kernels", "depth", "data_path"]
-        print(keys)
-        print(list(configData))
+        keys = ['strategies', 'manipulations', 'human', 'pool_size', 
+                'budget', 'base_kernels', 'depth', 'data_path'
+        ]
         assert set(keys).issubset(list(configData))
 
 
