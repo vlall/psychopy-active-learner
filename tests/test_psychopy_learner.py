@@ -1,6 +1,5 @@
 import random
 import pandas as pd
-from psychopy import visual, event, core
 from bams.learners import ActiveLearner
 from bams.query_strategies import (
     BALD,
