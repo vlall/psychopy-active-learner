@@ -2,7 +2,6 @@ import random
 from psychopy import visual, event, core
 import time
 
-
 """
 This file runs the dot experiment using the Psychopy Toolbox, which presents
 a uniform distribution of dots across a 500x500 screen. It takes as input the
@@ -12,8 +11,9 @@ in order to converge to the kernel grammar which best describes the relationship
 human behavior.
 """
 
+
 def get_typed_answer(win, guess):
-    instruction_text = visual.TextStim(win, text = u'How many dots did you see?', pos=(0, 100))
+    instruction_text = visual.TextStim(win, text=u'How many dots did you see?', pos=(0, 100))
     guess.text = ''
     timeout = time.time() + 5
     while True:
@@ -35,6 +35,7 @@ def get_typed_answer(win, guess):
         guess.draw()
         win.flip()
 
+
 def run_experiment(win, guess, n_dots, contrast):
     dot_xys = []
 
@@ -42,7 +43,7 @@ def run_experiment(win, guess, n_dots, contrast):
         dot_x = random.uniform(-250, 250)
         dot_y = random.uniform(-250, 250)
         dot_xys.append([dot_x, dot_y])
-    #print(dot_xys)
+    # print(dot_xys)
 
     dot_stim = visual.ElementArrayStim(
         win=win,
@@ -51,8 +52,8 @@ def run_experiment(win, guess, n_dots, contrast):
         elementMask="circle",
         sizes=10,
         contrs=contrast,
-        nElements = n_dots,
-        xys = dot_xys,
+        nElements=n_dots,
+        xys=dot_xys,
     )
 
     dot_stim.draw()
@@ -62,14 +63,14 @@ def run_experiment(win, guess, n_dots, contrast):
     return (get_typed_answer(win, guess))
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     """
     Run a test of the experiment.
     """
     win = visual.Window(
-    size=[500, 500],
-    units="pix",
-    fullscr=False
+        size=[500, 500],
+        units="pix",
+        fullscr=False
     )
     answer_text = visual.TextStim(win)
     guess = run_experiment(win, answer_text, 10, .90)

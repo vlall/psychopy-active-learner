@@ -18,8 +18,8 @@ def plot(df, strategy_name, plot_name, dim, save_figure=False):
                         data=df, hue="Strategy_del"
                         )
     sns.pointplot(x='Trial', y='Probability_y',
-                    data=df2, palette="hls", hue="Strategy"
-                        )
+                  data=df2, palette="hls", hue="Strategy"
+                  )
     sns.set_context("notebook", font_scale=1)
     fig.set(ylabel="Posterior Probability")
     fig.set(xlabel="Trial Number")
@@ -105,18 +105,17 @@ RANDOM_PATH_ALL = RANDOM_PATH_ROOT + "/all_models"
 
 df1, plot_name1 = get_best_model_and_name(BALD_PATH_ROOT, strategies[0])
 df2, plot_name2 = get_best_model_and_name(RANDOM_PATH_ROOT, strategies[1])
-#plot_top_5_models(BALD_PATH_ROOT, strategies[0])
-#sys.exit()
+# plot_top_5_models(BALD_PATH_ROOT, strategies[0])
+# sys.exit()
 
 plot_names = [plot_name1, plot_name2]
 merged_df = pd.merge(df1, df2, on='Trial')
 
-#plot_path1 = ("%s/%s/%s") % (BALD_PATH_ALL, strategies[0], translate_file(plot_names[0]))
-#plot_path2 = ("%s/%s/%s") % (RANDOM_PATH_ALL, strategies[1], translate_file(plot_names[1]))
-#open_trial_data(BALD_PATH_ROOT + "/" + strategies[0] + "_trials.pkl", strategies[0])# This opens trial data
+# plot_path1 = ("%s/%s/%s") % (BALD_PATH_ALL, strategies[0], translate_file(plot_names[0]))
+# plot_path2 = ("%s/%s/%s") % (RANDOM_PATH_ALL, strategies[1], translate_file(plot_names[1]))
+# open_trial_data(BALD_PATH_ROOT + "/" + strategies[0] + "_trials.pkl", strategies[0])# This opens trial data
 print("BALD %s converges to" % str(manipulate))
 print(plot_name1)
 print("Random %s converges to" % str(manipulate))
 print(plot_name2)
 plot(merged_df, list(strategies), list(plot_names), str(dim), save_figure=False)
-
