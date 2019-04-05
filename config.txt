@@ -1,11 +1,15 @@
-[Experiment]
+[Experimental Matrix]
 STRATEGIES = BALD, Random
+MANIPULATIONS = {"dots": 1, "contrast": 1, "random": 1, "all": 3}
+
+[Oracle Type]
 HUMAN = False
+
+[Learner Hyper-parameters]
 POOL_SIZE = 200
 BUDGET = 50
 BASE_KERNELS = PER, LIN, K, LG
 DEPTH = 2
-MANIPULATIONS = {"dots": 1, "contrast": 1, "random": 1, "all": 3}
 
 [Data]
 DATA_PATH = data/
