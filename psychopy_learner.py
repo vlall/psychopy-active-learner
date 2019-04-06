@@ -14,7 +14,6 @@ import json
 import sys
 from time import gmtime, strftime
 from six.moves import configparser
-import dot_experiment
 
 
 class PsychopyLearner(object):
@@ -211,5 +210,6 @@ class PsychopyLearner(object):
 
 if __name__=="__main__":
     from psychopy import visual, event, core
+    import dot_experiment
     experiments = PsychopyLearner()
     experiments.run_matrix()
