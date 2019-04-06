@@ -14,22 +14,12 @@ import json
 import sys
 from six.moves import configparser
 import unittest
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from psychopy_learner import PsychopyLearner
 
 
-class TestPsychopyLearner(object):
-    """TODO: Import psychopy_learner.py without errors"""
-
-    # strategies = ["BALD", "Random"]
-    # manipulations = {"dots": 1, "contrast": 1, "random" :1 , "all": 3}
-    # dim = 1
-    # manipulate = "dots"
-    # root = "data/"
-    # strategies = ["BALD_%s" % manipulate, "Random_%s" % manipulate]
-    # BALD_PATH_ROOT = root + mapping_example["BALD_" + manipulate]
-    # BALD_PATH_ALL = BALD_PATH_ROOT + "/all_models"
-    # RANDOM_PATH_ROOT = root + mapping_example["Random_" + manipulate]
-    # RANDOM_PATH_ALL = RANDOM_PATH_ROOT + "/all_models"
-    # trialData = ['n_dots', 'contrast', 'guess', 'n_dim']
+class TestPsychopyLearner(unittest.TestCase):
 
 
     def test_config_keys(self):
@@ -49,35 +39,43 @@ class TestPsychopyLearner(object):
         assert set(keys).issubset(list(configData))
 
 
-    def test_run_learner_on_experiment(self):
-        mapping_output = run_learner_on_experiment('BALD', 1, "dots")
-        assert os.path.isfile("mappings/%s" % mapping_output)
-
-
     def test_bald_path(self):
+        root = "data/"
+        BALD_PATH_ROOT = root + "21605e4d-258b-4acf-8f82-7a0bc62f83ed/BALD_dots"
+        BALD_PATH_ALL = BALD_PATH_ROOT + "/all_models"
         random_df = pd.read_pickle("%s.pkl" % BALD_PATH_ROOT)
         assert(len(random_df)>0)
 
 
     def test_random_path(self):
+        root = "data/"
+        RANDOM_PATH_ROOT = root + "fec5ab43-9fac-4943-b8a7-2ef575aced28/Random_dots"
+        RANDOM_PATH_ALL = RANDOM_PATH_ROOT + "/all_models"
         random_df = pd.read_pickle("%s.pkl" % RANDOM_PATH_ROOT)
         assert(len(random_df)>0)
 
 
-    def test_dummy_oracle(self):
-        dummy = dummy_oracle(0.49)
-        self.assertEqual(scaled, 0.49)
-
-
     def test_scale_up(self):
-        scaled = scale_up(100, 0.99)
+        experiments = PsychopyLearner()
+        scaled = experiments.scale_up(100, 0.99)
         self.assertEqual(scaled, 99)
 
 
     def test_scale_down(self):
-        scaled = scale_down(100, 99)
+        experiments = PsychopyLearner()
+        scaled = experiments.scale_down(100, 99)
         self.assertEqual(scaled, 0.99)
 
+
+    """
+    def test_run_learner_on_experiment(self):
+        mapping_output = run_learner_on_experiment('BALD', 1, "dots")
+        assert os.path.isfile("mappings/%s" % mapping_output)
+
+    def test_dummy_oracle(self):
+        dummy = dummy_oracle(0.49)
+        self.assertEqual(scaled, 0.49)
+    """
 
 if __name__ == '__main__':
     unittest.main()
