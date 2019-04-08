@@ -62,7 +62,7 @@ class PsychopyLearner(object):
                 val = self.run_learner_on_experiment(strategy, dim, self.manipulation)
                 self.json_uuid['%s_%s' % (strategy, self.manipulation)] = val
                 # Clear data for next strategy
-                finalData = finalData[0:0]
+                self.finalData = self.finalData[0:0]
 
         # Generate and dump mappings of the experimental data.
         mapId = 'mapping_%s.json' % str(uuid.uuid4())[:4]
@@ -72,6 +72,7 @@ class PsychopyLearner(object):
         with open(mapPath, 'w') as map:
             json.dump(self.json_uuid, map)
         print("Your metadata was saved to mappings/%s " % (mapId))
+        return mapPath
 
 
     def scale_up(self, threshold, dim):

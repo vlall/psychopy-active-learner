@@ -61,21 +61,33 @@ class TestPsychopyLearner(unittest.TestCase):
         self.assertEqual(scaled, 99)
 
 
+    def test_scale_up_round(self):
+        experiments = PsychopyLearner()
+        scaled = experiments.scale_up(100, .269999)
+        self.assertEqual(scaled, 27)
+
+
     def test_scale_down(self):
         experiments = PsychopyLearner()
-        scaled = experiments.scale_down(100, 99)
-        self.assertEqual(scaled, 0.99)
-
-
-    """
-    def test_run_learner_on_experiment(self):
-        mapping_output = run_learner_on_experiment('BALD', 1, "dots")
-        assert os.path.isfile("mappings/%s" % mapping_output)
-
-    def test_dummy_oracle(self):
-        dummy = dummy_oracle(0.49)
+        scaled = experiments.scale_down(100, 49)
         self.assertEqual(scaled, 0.49)
-    """
+
+
+
+    def test_run_learner_on_experiment(self):
+        experiments = PsychopyLearner()
+        experiments.BUDGET = 2
+        experiments.MANIPULATIONS = {"dots": 1}
+        mapping_output = experiments.run_matrix()
+        assert os.path.isfile(mapping_output)
+
+
+    def test_dummy_oracle_dots(self):
+        experiments = PsychopyLearner()
+        experiments.manipulation = 'dots'
+        dummy = experiments.dummy_oracle([0.49])
+        self.assertEqual(dummy, 0.49)
+
 
 if __name__ == '__main__':
     unittest.main()
