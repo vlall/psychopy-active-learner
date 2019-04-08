@@ -73,7 +73,6 @@ class TestPsychopyLearner(unittest.TestCase):
         self.assertEqual(scaled, 0.49)
 
 
-
     def test_run_learner_on_experiment(self):
         experiments = PsychopyLearner()
         experiments.BUDGET = 2
