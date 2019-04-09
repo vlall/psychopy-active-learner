@@ -3,6 +3,7 @@ scipy
 matplotlib
 pandas
 pyopengl
+pybind11
 pyglet
 pillow
 moviepy
