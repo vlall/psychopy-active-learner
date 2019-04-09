@@ -9,11 +9,38 @@ This grammar is used to describe the relationship between stimuli and human beha
 
 After the experiment is run to completion using the configured hyper-parameters, the experiment generates a `data/` folder along with a UUID used to denote the specific experiment data generated. This is used as input into the analysis scripts for interpretting the data. The program generates a metadata mapping to all of the experiments run in `mappings/`
  
-To run, make sure you have BAMS installed (https://github.com/Dallinger/bams)
 
-Run:
+### Prerequisites
 
-`pip install -r requirements.txt`
+Make sure you have the BAMS package installed (https://github.com/Dallinger/bams) and its requirements. Then, you can install these requirements using `pip install -r requirements.txt`
 
-Make sure `config.txt` has the desired hyper-parameters, then run the experiment using
-`python psychopy_learner.py`
+
+### Running
+
+Check to make sure you have the desired configuration in `config.txt`.
+This the example config:
+
+```
+[Experimental Matrix]
+STRATEGIES = BALD, Random
+MANIPULATIONS = {"dots": 1, "contrast": 1, "random": 1, "all": 3}
+
+[Oracle Type]
+HUMAN = False
+
+[Learner Hyper-parameters]
+POOL_SIZE = 200
+BUDGET = 50
+BASE_KERNELS = PER, LIN, K, LG
+DEPTH = 2
+
+[Data]
+DATA_PATH = data/
+
+```
+Once everything is setup you can run the experiment matrix using `python psychopy_learner.py`
+
+
+### Running the tests
+
+To run the tests use `pytest tests` to run from the `tests` directory
