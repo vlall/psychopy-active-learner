@@ -4,6 +4,12 @@ cache:
   - apt
   - pip
   - git
+addons:
+  apt:
+    packages:
+      - gcc-6
+      - g++-6
+      - cmake
 matrix:
   include:
   - python: 3.6
@@ -19,4 +25,12 @@ install:
     - cd ..
     - pip install -r requirements.txt
 script:
-    - pytest tests
+  # Link gcc-6 and g++-6 to their standard commands
+  - ln -s /usr/bin/gcc-6 /usr/local/bin/gcc
+  - ln -s /usr/bin/g++-6 /usr/local/bin/g++
+  # Export CC and CXX to tell cmake which compiler to use
+  - export CC=/usr/bin/gcc-6
+  - export CXX=/usr/bin/g++-6
+  # Check versions of gcc, g++ and cmake
+  - gcc -v && g++ -v && cmake --version
+  - pytest tests
