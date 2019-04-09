@@ -26,11 +26,9 @@ STRATEGIES = BALD, Random
 # The manipuations refer to a dictionary of all of the variables the learner is manipulating. The value is the number of dimensions being manipulated
 MANIPULATIONS = {"dots": 1, "contrast": 1, "random": 1, "all": 3}
 
-[Oracle Type]
 # True sets this to the regular `PsychopyLearner.oracle`, False sets this to the `Psychopy.dummer_oracle`
 HUMAN = False
 
-[Learner Hyper-parameters]
 # Pool size tells you the maximum amount of candidate models
 POOL_SIZE = 200
 
@@ -43,7 +41,6 @@ BASE_KERNELS = PER, LIN, K, LG
 # The depth specifies the degree to which the base kerneles are combined
 DEPTH = 2
 
-[Data]
 # This is the data output path
 DATA_PATH = data/
 
