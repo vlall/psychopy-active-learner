@@ -11,7 +11,7 @@ After the experiment is run to completion using the configured hyper-parameters,
 
 ### Prerequisites
 
-Make sure you have the BAMS package and it's requirements installed (see: https://github.com/Dallinger/bams). Then, you can install the psychopy-active-learner requirements using `pip install -r requirements.txt` from this cloned repo.
+Make sure you have the BAMS package and it's requirements installed (see: https://github.com/Dallinger/bams). Then, you can install the `psychopy-active-learner` requirements using `pip install -r requirements.txt` from this cloned repo.
 
 
 ### Running
@@ -26,7 +26,7 @@ STRATEGIES = BALD, Random
 # The manipuations refer to a dictionary of all of the variables the learner is manipulating. The key is the name of the manipulated variable. The value is the number of dimensions being simulatenously manipulated.
 MANIPULATIONS = {"dots": 1, "contrast": 1, "random": 1, "all": 3}
 
-# True sets this to the regular `PsychopyLearner.oracle`, False sets this to the `Psychopy.dummer_oracle`
+# True sets this to the regular `PsychopyLearner.oracle()`, False sets this to the `Psychopy.dummer_oracle()`
 HUMAN = False
 
 # Pool size tells you the maximum amount of candidate models
