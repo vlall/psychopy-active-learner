@@ -20,10 +20,10 @@ Check to make sure you have the desired configuration in `config.txt`.
 This the example config:
 
 ```
-# These are the only two options, each strategy is run against the manipulations in the matrix
+# These are active learner objects from BAMS. Each strategy is run against the manipulations below
 STRATEGIES = BALD, Random
 
-# The manipuations refer to a dictionary of all of the variables the learner is manipulating. The value is the number of dimensions being manipulated
+# The manipuations refer to a dictionary of all of the variables the learner is manipulating. The key is the name of the manipulated variable. The value is the number of dimensions being simulatenously manipulated.
 MANIPULATIONS = {"dots": 1, "contrast": 1, "random": 1, "all": 3}
 
 # True sets this to the regular `PsychopyLearner.oracle`, False sets this to the `Psychopy.dummer_oracle`
