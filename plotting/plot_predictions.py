@@ -1,13 +1,13 @@
-import seaborn as sns;
-
-sns.set()
+import numpy as np
+import matplotlib.patches as mpatches
+import pickle
+import matplotlib.ticker as ticker
+import pandas as pd
+import seaborn as sns
 import matplotlib.pyplot as plt
 import seaborn as sns
-import pandas as pd
-import matplotlib.ticker as ticker
-import pickle
-import matplotlib.patches as mpatches
-import numpy as np
+
+sns.set()
 
 mapping = {
     "fake_human_BALD_1": "fake_human/86480bd4-af58-42f3-8582-bdaee9b0b40a",  # new,

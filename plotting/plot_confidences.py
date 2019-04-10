@@ -30,7 +30,7 @@ def plot(df, strategy_name, plot_name, dim, save_figure=False):
     plt.xlim(0, None)
     plt.ylim(0, None)
     plt.legend(loc='upper left')
-    if save_figure == True:
+    if save_figure:
         plt.savefig("%s.png" % "BAMS on dimension %s" % (dim))
     else:
         plt.show()
@@ -41,14 +41,14 @@ def open_trial_data(path, strategy_name, save_figure=False):
         model = pickle.load(f)
     model['Predictor'] = 'human'
     print(model)
-    fig = sns.pointplot(x="n_dots", y="guess", data=model, hue="Predictor");
+    fig = sns.pointplot(x="n_dots", y="guess", data=model, hue="Predictor")
     sns.set_context("notebook", font_scale=1)
     fig.set(ylabel="Number of dots predicted")
     fig.set(xlabel="Number of dots presented")
     fig.set(title=strategy_name)
     plt.xlim(0, 100)
     plt.ylim(0, 100)
-    if save_figure == True:
+    if save_figure:
         fig.savefig("%s.png" % strategy_name)
     else:
         plt.show()

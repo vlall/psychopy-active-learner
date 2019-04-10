@@ -18,7 +18,6 @@ from six.moves import configparser
 
 class PsychopyLearner(object):
 
-
     def __init__(self):
         # Read the config file
         configFile = "config.txt"
@@ -52,7 +51,6 @@ class PsychopyLearner(object):
         else:
             self.oracle = self.dummy_oracle
 
-
     def run_matrix(self):
         """
         Experiment matrix (manipulations x strategies). See config.txt for these settings
@@ -74,7 +72,6 @@ class PsychopyLearner(object):
         print("Your metadata was saved to mappings/%s " % (mapId))
         return mapPath
 
-
     def scale_up(self, threshold, dim):
         """Rescale up to actual values"""
         out = round(dim * threshold)
@@ -82,12 +79,10 @@ class PsychopyLearner(object):
             return 1
         return int(out)
 
-
     def scale_down(self, threshold, dim):
         """Rescale 0 <= output <= 1"""
         out = float(dim / float(threshold)) if threshold else 0.0
         return out
-
 
     def oracle(self, x):
         """
@@ -115,7 +110,6 @@ class PsychopyLearner(object):
             return float(guess) / 100.0
         return 0.0
 
-
     def dummy_oracle(self, x):
         """
         The oracle usually manipulates the dimension(s) in x based on prior information.
@@ -136,7 +130,6 @@ class PsychopyLearner(object):
         self.finalData.loc[len(self.finalData)] = [n_dots, contrast, n_dots, list(x)]
         print(self.finalData)
         return self.scale_down(max_n_dots, n_dots)
-
 
     def run_learner_on_experiment(self, strategy, dim, manipulation):
         UUID = str(uuid.uuid4())
@@ -209,7 +202,7 @@ class PsychopyLearner(object):
         return (UUID)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     from psychopy import visual, event, core
     import dot_experiment
     experiments = PsychopyLearner()

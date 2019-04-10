@@ -1,11 +1,12 @@
+import pandas as pd
 from bams.learners import ActiveLearner
 from bams.query_strategies import (
     BALD,
     HyperCubePool,
     RandomStrategy,
 )
-import seaborn as sns; sns.set()
-import pandas as pd
+import seaborn as sns
+sns.set()
 
 
 NDIM = 1
@@ -15,10 +16,10 @@ BASE_KERNELS = ["PER", "LIN", "K"]
 DEPTH = 2
 
 mapping = {
-            "fake_human_BALD_1": "fake_human/86480bd4-af58-42f3-8582-bdaee9b0b40a", #new,
-            "fake_human_random_1": "fake_human/50e384f3-761a-49e4-acaa-a9089ea970fd",
-            "BALD_1": "6b18151d-b50b-4d10-bd1a-058d50f30748",  # abbr
-            "Random_1": "9c702a06-ce75-4b1a-b853-e76ad16c2377",  # abbr
+    "fake_human_BALD_1": "fake_human/86480bd4-af58-42f3-8582-bdaee9b0b40a",  # new,
+    "fake_human_random_1": "fake_human/50e384f3-761a-49e4-acaa-a9089ea970fd",
+    "BALD_1": "6b18151d-b50b-4d10-bd1a-058d50f30748",  # abbr
+    "Random_1": "9c702a06-ce75-4b1a-b853-e76ad16c2377",  # abbr
 }
 
 random_learner = ActiveLearner(
@@ -43,6 +44,7 @@ bald_linear = []
 random_linear = []
 bald_constant = []
 random_constant = []
+
 
 def train_learner(learner, df, winning_likelihood, linear_likelihood, constant_likelihood):
     print("There are %d models." % len(df))
@@ -92,7 +94,7 @@ random_out = root + "%s/Random_1_predictions_all.pkl" % mapping["Random_1"]
 print(BALD_PATH)
 bald_df = pd.read_pickle("%s.pkl" % BALD_PATH)
 random_df = pd.read_pickle("%s.pkl" % RANDOM_PATH)
-x = [x for x in range(1,100)]
+x = [x for x in range(1, 100)]
 
 # Script begins
 print(bald_df)
@@ -128,8 +130,8 @@ likelihood_df = pd.DataFrame(
      })
 likelihood_df.to_pickle(likelihood_out)
 
-#Print/Save Predictions
-#print(bald_prediction_100)
-#print(random_prediction_100)
-#save_bald.to_pickle(bald_out)
-#save_random.to_pickle(random_out)
+# Print/Save Predictions
+# print(bald_prediction_100)
+# print(random_prediction_100)
+# save_bald.to_pickle(bald_out)
+# save_random.to_pickle(random_out)
