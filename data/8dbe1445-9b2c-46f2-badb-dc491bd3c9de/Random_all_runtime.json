@@ -1,0 +1,1 @@
+{"NAME": "Random_all", "DATE/TIME": "2019-04-11 19:15:00", "PATH": "data/8dbe1445-9b2c-46f2-badb-dc491bd3c9de/", "UUID": "8dbe1445-9b2c-46f2-badb-dc491bd3c9de", "NDIM": 3, "MANIPULATE": "all", "POOL_SIZE": 200, "BUDGET": 20, "BASE_KERNELS": ["PER", "LIN", "K"], "DEPTH": 2, "OUTPUT_NAME": "data/8dbe1445-9b2c-46f2-badb-dc491bd3c9de/Random_all"}

@@ -7,8 +7,8 @@ HUMAN = False
 
 [Learner Hyper-parameters]
 POOL_SIZE = 200
-BUDGET = 50
-BASE_KERNELS = PER, LIN, K, LG
+BUDGET = 20
+BASE_KERNELS = PER, LIN, K
 DEPTH = 2
 
 [Data]
