@@ -6,6 +6,7 @@ from bams.query_strategies import (
     RandomStrategy,
 )
 import seaborn as sns
+import random
 sns.set()
 
 
@@ -14,6 +15,8 @@ POOL_SIZE = 200
 BUDGET = 20
 BASE_KERNELS = ["PER", "LIN", "K"]
 DEPTH = 2
+root = "data/"
+manip = "contrast"
 
 mapping = {"BALD_dots": "2198efd7-2724-4322-9c3b-fba4f4cf9b32", "Random_dots": "d39a7b20-6ce5-49b4-9597-48555184d528",
      "BALD_contrast": "2e71966c-f655-4a90-bd44-66a53725fec1", "Random_contrast": "7c7c5563-5698-46d3-a34b-22e3e03466b9",
@@ -58,7 +61,11 @@ def train_learner(learner, df, winning_likelihood, linear_likelihood, constant_l
                 linear = model
             elif splitTerm == constantTerm:
                 constant = model
-        guess = df["guess"].loc[i] / 100.0
+        if manip == "dots" or manip == "all":
+            guess = df["guess"].loc[i] / 100.0
+        else:
+            print("using dummy")
+            guess = random.random()
         correct = df["n_dots"].loc[i] / 100.0
         learner.update(correct, guess)
         print(i)
@@ -79,17 +86,16 @@ def run_predictions(learner):
     prediction_100 = []
     for dots in range(1, 100):
         print("Input:" + str(dots))
-        output = random_learner.predict([float(dots / 100.0)])[0]
+        output = learner.predict([float(dots / 100.0)])[0]
         print(output)
         prediction_100.append(output[0] * 100)
     return (prediction_100)
 
 
-root = "data/"
-BALD_PATH = root + "%s/BALD_contrast_trials" % mapping["BALD_contrast"]
-RANDOM_PATH = root + "%s/Random_contrast_trials" % mapping["Random_contrast"]
-bald_out = root + "%s/BALD_contrast_predictions_all.pkl" % mapping["BALD_contrast"]
-random_out = root + "%s/Random_contrast_predictions_all.pkl" % mapping["Random_contrast"]
+BALD_PATH = root + "%s/BALD_%s_trials" % (mapping["BALD_%s" % manip], manip)
+RANDOM_PATH = root + "%s/Random_%s_trials" % (mapping["Random_%s" % manip], manip)
+bald_out = root + "%s/BALD_%s_predictions_all.pkl" % (mapping["BALD_%s" % manip], manip)
+random_out = root + "%s/Random_%s_predictions_all.pkl" % (mapping["Random_%s" % manip], manip)
 print(BALD_PATH)
 bald_df = pd.read_pickle("%s.pkl" % BALD_PATH)
 random_df = pd.read_pickle("%s.pkl" % RANDOM_PATH)
