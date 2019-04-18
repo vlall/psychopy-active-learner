@@ -1,0 +1,1 @@
+{"NAME": "BALD_contrast", "DATE/TIME": "2019-04-18 07:53:23", "PATH": "data/40ac7f7a-119b-4ad3-90fa-1185e654192e/", "UUID": "40ac7f7a-119b-4ad3-90fa-1185e654192e", "NDIM": 1, "MANIPULATE": "contrast", "POOL_SIZE": 50, "BUDGET": 20, "BASE_KERNELS": ["PER", "LIN", "K"], "DEPTH": 2, "OUTPUT_NAME": "data/40ac7f7a-119b-4ad3-90fa-1185e654192e/BALD_contrast"}

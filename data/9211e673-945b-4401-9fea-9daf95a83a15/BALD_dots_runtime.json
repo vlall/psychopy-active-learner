@@ -1,0 +1,1 @@
+{"NAME": "BALD_dots", "DATE/TIME": "2019-04-08 23:38:29", "PATH": "data/9211e673-945b-4401-9fea-9daf95a83a15/", "UUID": "9211e673-945b-4401-9fea-9daf95a83a15", "NDIM": 1, "MANIPULATE": "dots", "POOL_SIZE": 200, "BUDGET": 2, "BASE_KERNELS": ["PER", "LIN", "K", "LG"], "DEPTH": 2, "OUTPUT_NAME": "data/9211e673-945b-4401-9fea-9daf95a83a15/BALD_dots"}

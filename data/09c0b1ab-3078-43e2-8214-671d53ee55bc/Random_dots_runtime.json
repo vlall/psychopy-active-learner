@@ -1,0 +1,1 @@
+{"NAME": "Random_dots", "DATE/TIME": "2019-04-08 23:40:01", "PATH": "data/09c0b1ab-3078-43e2-8214-671d53ee55bc/", "UUID": "09c0b1ab-3078-43e2-8214-671d53ee55bc", "NDIM": 1, "MANIPULATE": "dots", "POOL_SIZE": 200, "BUDGET": 2, "BASE_KERNELS": ["PER", "LIN", "K", "LG"], "DEPTH": 2, "OUTPUT_NAME": "data/09c0b1ab-3078-43e2-8214-671d53ee55bc/Random_dots"}

@@ -1,0 +1,1 @@
+{"NAME": "Random_contrast", "DATE/TIME": "2019-04-18 07:54:10", "PATH": "data/d7a50ea9-8627-48f2-9ae2-dabbe3f7637a/", "UUID": "d7a50ea9-8627-48f2-9ae2-dabbe3f7637a", "NDIM": 1, "MANIPULATE": "contrast", "POOL_SIZE": 50, "BUDGET": 20, "BASE_KERNELS": ["PER", "LIN", "K"], "DEPTH": 2, "OUTPUT_NAME": "data/d7a50ea9-8627-48f2-9ae2-dabbe3f7637a/Random_contrast"}

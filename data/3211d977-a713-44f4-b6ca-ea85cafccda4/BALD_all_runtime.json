@@ -1,0 +1,1 @@
+{"NAME": "BALD_all", "DATE/TIME": "2019-04-18 08:03:07", "PATH": "data/3211d977-a713-44f4-b6ca-ea85cafccda4/", "UUID": "3211d977-a713-44f4-b6ca-ea85cafccda4", "NDIM": 3, "MANIPULATE": "all", "POOL_SIZE": 50, "BUDGET": 20, "BASE_KERNELS": ["PER", "LIN", "K"], "DEPTH": 2, "OUTPUT_NAME": "data/3211d977-a713-44f4-b6ca-ea85cafccda4/BALD_all"}
