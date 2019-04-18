@@ -32,7 +32,10 @@ def plot(df, manipulate):
     print(df)
     fig = sns.scatterplot(x="manipulation", y="prediction", data=df, hue="Predictor")
     fig.set(ylabel="Number of dots predicted")
-    fig.set(xlabel="Number of dots presented")
+    if manipulate == "dots" or manipulate == "all":
+        fig.set(xlabel="Number of dots presented")
+    else:
+        fig.set(xlabel="Level of %s variable" % manipulate)
     plt.show()
 
 
@@ -58,22 +61,20 @@ def translate(model):
 
 
 def main():
-    mapId = "mapping_887d"
+    mapId = "mapping_10c9"
     with open("mappings/%s.json" % mapId) as json_file:
         mapping = json.load(json_file)
-    strategy = "BALD"
+    strategy = "Random"
     manipulate = "contrast"
-    file_name = strategy + "_" + manipulate
-    uuid = mapping[file_name]
-    if not os.path.exists("data/%s" % uuid):
-        print("File does not exist")
-        sys.exit()
+    file_name = "%s_%s" % (strategy, manipulate)
+    if not os.path.exists("data/%s" % mapping[file_name]):
+        print("No such file '{}'".format(mapping[file_name]), file=sys.stderr)
     ROOT_PATH = "data/%s/all_models/" % uuid
     PATH = ROOT_PATH + file_name
     df, plot_name = get_best_model_and_name("data/%s" % uuid, file_name)
     NAME = translate(plot_name)
     print(plot_name)
-    FULL_PATH = PATH + "/" + NAME + ".pkl"
+    FULL_PATH = "%s/%s.pkl" % (PATH, NAME)
     print(FULL_PATH)
     with open(FULL_PATH, 'rb') as f:
         learner = pickle.load(f)
@@ -81,11 +82,10 @@ def main():
         x = [x for x in range(0, 100)]
     else:
         x = list(np.arange(0.0, 1.0, 0.01))
-    print(len(x))
     y = run_predictions(learner, manipulate)
     bald_df = pd.DataFrame(data={"manipulation": x, "prediction": y})
     bald_df['Predictor'] = file_name
-    plot(bald_df, file_name)
+    plot(bald_df, manipulate)
 
 
 if __name__ == "__main__":
