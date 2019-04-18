@@ -62,7 +62,7 @@ def main():
     with open("mappings/%s.json" % mapId) as json_file:
         mapping = json.load(json_file)
     strategy = "BALD"
-    manipulate = "dots"
+    manipulate = "contrast"
     file_name = strategy + "_" + manipulate
     uuid = mapping[file_name]
     if not os.path.exists("data/%s" % uuid):
@@ -82,7 +82,7 @@ def main():
     else:
         x = list(np.arange(0.0, 1.0, 0.01))
     print(len(x))
-    y = run_predictions(learner)
+    y = run_predictions(learner, manipulate)
     bald_df = pd.DataFrame(data={"manipulation": x, "prediction": y})
     bald_df['Predictor'] = file_name
     plot(bald_df, file_name)
