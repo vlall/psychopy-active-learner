@@ -131,6 +131,11 @@ class PsychopyLearner(object):
         print(self.finalData)
         return self.scale_down(max_n_dots, n_dots)
 
+    def translate(self, model):
+        s = str(model).split()[0]
+        translate = s.replace("(", "_").rstrip(',')
+        return translate
+
     def run_learner_on_experiment(self, strategy, dim, manipulation):
         UUID = str(uuid.uuid4())
         PATH = self.DATA_PATH + UUID + "/"
@@ -163,20 +168,22 @@ class PsychopyLearner(object):
             x = learner.next_query()
             y = learner.query(self.oracle, x)
             learner.update(x, y)
-            print(trial)
             posteriors = learner.posteriors
             for i, model in enumerate(learner.models):
                 posteriorMatrix[trial, i] = posteriors[i]
-                if learner.budget == 1:
-                    s = str(model).split()[0]
-                    translate = s.replace("(", "_").rstrip(',')
-                    make_folder = "%s/all_models/%s" % (PATH, NAME)
-                    if not os.path.exists(make_folder):
-                        os.makedirs(make_folder)
-                    filepath = "%s/%s.pkl" % (make_folder, translate)
-                    with open(filepath, 'wb') as f:
-                        pickle.dump(model, f)
             trial += 1
+        for model in learner.models:
+            translate = self.translate(str(model))
+            make_folder = "%s/all_models/%s" % (PATH, NAME)
+            if not os.path.exists(make_folder):
+                os.makedirs(make_folder)
+            filepath = "%s/%s.pkl" % (make_folder, translate)
+            with open(filepath, 'wb') as f:
+                pickle.dump(model, f)
+            print("posterior saved as:")
+            [print(str(i)) for i in learner.models]
+        print("string saved as:")
+        [print(str(i)) for i in learner.models]
         df = pd.DataFrame(posteriorMatrix, columns=[str(i) for i in learner.models])
         outputName = PATH + NAME
         df.to_pickle(outputName + '.pkl')

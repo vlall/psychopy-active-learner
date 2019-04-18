@@ -102,4 +102,5 @@ ENV/
 
 # custom
 data/
-
+.idea/
+mappings/

@@ -1,3 +1,4 @@
+from psychopy_learner import PsychopyLearner
 import random
 import pandas as pd
 from bams.learners import ActiveLearner
@@ -14,13 +15,12 @@ import json
 import sys
 from six.moves import configparser
 import unittest
-import os, sys
+import os
+import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from psychopy_learner import PsychopyLearner
 
 
 class TestPsychopyLearner(unittest.TestCase):
-
 
     def test_config_keys(self):
         configFile = "config.txt"
@@ -33,45 +33,39 @@ class TestPsychopyLearner(unittest.TestCase):
         configData = {}
         for section in parser.sections():
             configData.update(dict(parser.items(section)))
-        keys = ['strategies', 'manipulations', 'human', 'pool_size', 
+        keys = ['strategies', 'manipulations', 'human', 'pool_size',
                 'budget', 'base_kernels', 'depth', 'data_path'
-        ]
+                ]
         assert set(keys).issubset(list(configData))
-
 
     def test_bald_path(self):
         root = "data/"
         BALD_PATH_ROOT = root + "21605e4d-258b-4acf-8f82-7a0bc62f83ed/BALD_dots"
         BALD_PATH_ALL = BALD_PATH_ROOT + "/all_models"
         random_df = pd.read_pickle("%s.pkl" % BALD_PATH_ROOT)
-        assert(len(random_df)>0)
-
+        assert(len(random_df) > 0)
 
     def test_random_path(self):
         root = "data/"
         RANDOM_PATH_ROOT = root + "fec5ab43-9fac-4943-b8a7-2ef575aced28/Random_dots"
         RANDOM_PATH_ALL = RANDOM_PATH_ROOT + "/all_models"
         random_df = pd.read_pickle("%s.pkl" % RANDOM_PATH_ROOT)
-        assert(len(random_df)>0)
-
+        assert(len(random_df) > 0)
 
     def test_scale_up(self):
         experiments = PsychopyLearner()
         scaled = experiments.scale_up(100, 0.99)
         self.assertEqual(scaled, 99)
 
-
     def test_scale_up_round(self):
         experiments = PsychopyLearner()
         scaled = experiments.scale_up(100, .269999)
         self.assertEqual(scaled, 27)
 
-
     def test_scale_down(self):
         experiments = PsychopyLearner()
         scaled = experiments.scale_down(100, 49)
         self.assertEqual(scaled, 0.49)
-
 
     def test_run_learner_on_experiment(self):
         experiments = PsychopyLearner()
@@ -79,7 +73,6 @@ class TestPsychopyLearner(unittest.TestCase):
         experiments.MANIPULATIONS = {"dots": 1}
         mapping_output = experiments.run_matrix()
         assert os.path.isfile(mapping_output)
-
 
     def test_dummy_oracle_dots(self):
         experiments = PsychopyLearner()
