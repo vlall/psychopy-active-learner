@@ -77,10 +77,10 @@ def main():
     print(FULL_PATH)
     with open(FULL_PATH, 'rb') as f:
         learner = pickle.load(f)
-    if manipulate == "all":
-        x = list(np.arange(0.0, 1.0, 0.01))
-    else:
+    if manipulate == "dots" or manipulate == "all":
         x = [x for x in range(0, 100)]
+    else:
+        x = list(np.arange(0.0, 1.0, 0.01))
     print(len(x))
     y = run_predictions(learner)
     bald_df = pd.DataFrame(data={"manipulation": x, "prediction": y})
