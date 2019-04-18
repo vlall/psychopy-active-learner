@@ -90,12 +90,12 @@ def model_predict(plot_path, val):
     return model.predict(val)
 
 
-mapId = "mapping_f275"
+mapId = "mapping_887d"
 with open("mappings/%s.json" % mapId) as json_file:
     mapping = json.load(json_file)
 
 dim = 1
-manipulate = "contrast"
+manipulate = "random"
 root = "data/"
 strategies = ["BALD_%s" % manipulate, "Random_%s" % manipulate]
 BALD_PATH_ROOT = root + mapping["BALD_" + manipulate]

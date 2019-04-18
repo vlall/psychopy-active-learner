@@ -49,7 +49,7 @@ class PsychopyLearner(object):
                 fullscr=False
             )
         else:
-            self.oracle = self.dummy_oracle
+            self.oracle = self.dummy_oracle 
 
     def run_matrix(self):
         """
