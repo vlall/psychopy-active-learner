@@ -1,6 +1,5 @@
 import numpy as np
 import pickle
-import uuid
 import matplotlib.ticker as ticker
 import pandas as pd
 import seaborn as sns
@@ -13,8 +12,21 @@ import random
 
 
 def run_predictions(learner, manipulate):
-    """ Use input as a number """
-    prediction_100 = []
+    """
+    Use learner.predict on a float between 0 and 1.
+        Parameters
+        ----------
+        learner :
+            BAMS learner object
+        manipulate :
+            String of the manipulation
+
+        Returns
+        -------
+        predictionList:
+            n list of predicted values
+    """
+    predictionList = []
     for i in range(0, 100):
         print("Input:" + str(i))
         if manipulate == "all":
@@ -24,8 +36,17 @@ def run_predictions(learner, manipulate):
         else:
             output = learner.predict([float(i / 100.0)])[0]
         print(output)
-        prediction_100.append(output[0] * 100)
-    return (prediction_100)
+        # Convert float to a number of dots
+        predictionList.append(output[0] * 100)
+    return (predictionList)
+
+
+def get_trial_data(path, strategy, manipulate, save=True):
+    full_path = "%s/%s_%s_trials" % (path, strategy, manipulate)
+    trial_df = pd.read_pickle("%s.pkl" % full_path)
+    if save:
+        trial_df.to_csv("%s_%s_trials.csv" % (strategy, manipulate), sep='\t')
+    return trial_df
 
 
 def plot(df, manipulate):
@@ -61,13 +82,15 @@ def translate(model):
 
 
 def main():
+    # Custom prediction settings.
     mapId = "mapping_10c9"
-    with open("mappings/%s.json" % mapId) as json_file:
-        mapping = json.load(json_file)
     strategy = "Random"
     manipulate = "contrast"
     file_name = "%s_%s" % (strategy, manipulate)
-    if not os.path.exists("data/%s" % mapping[file_name]):
+    with open("mappings/%s.json" % mapId) as json_file:
+        mapping = json.load(json_file)
+    uuid = mapping[file_name]
+    if not os.path.exists("data/%s" % uuid):
         print("No such file '{}'".format(mapping[file_name]), file=sys.stderr)
     ROOT_PATH = "data/%s/all_models/" % uuid
     PATH = ROOT_PATH + file_name
@@ -78,14 +101,17 @@ def main():
     print(FULL_PATH)
     with open(FULL_PATH, 'rb') as f:
         learner = pickle.load(f)
+    # Conditionally set the x values
     if manipulate == "dots" or manipulate == "all":
         x = [x for x in range(0, 100)]
     else:
         x = list(np.arange(0.0, 1.0, 0.01))
+    # Set the y values by running the predictions
     y = run_predictions(learner, manipulate)
     bald_df = pd.DataFrame(data={"manipulation": x, "prediction": y})
     bald_df['Predictor'] = file_name
     plot(bald_df, manipulate)
+    #get_trial_data("data/%s" % uuid, strategy, manipulate)
 
 
 if __name__ == "__main__":
