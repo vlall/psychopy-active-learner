@@ -18,10 +18,8 @@ from six.moves import configparser
 
 class PsychopyLearner(object):
     """
-    Attributes are set from the config.txt
-
-    Args:
-        None
+    The PsychopyLearner object is initialized using the `config.txt` values.
+    This setup for an experiment matrix to be run using the self.run_matrix() function
 
     Attributes:
         STRATEGIES (list[str]): The active learner objects from BAMS which we use in the experiment
@@ -60,7 +58,7 @@ class PsychopyLearner(object):
         self.json_uuid = {}
         self.finalData = pd.DataFrame(columns=['n_dots', 'contrast', 'guess', 'n_dim'])
 
-        # Check if we need to load a psychopy window
+        # Check if we need to load a Psychopy window
         if self.HUMAN == 'True':
             win = visual.Window(
                 size=[500, 500],
@@ -72,8 +70,14 @@ class PsychopyLearner(object):
 
     def run_matrix(self):
         """
-        Experiment matrix (manipulations x strategies). See config.txt for these settings
+        Run the experiment matrix (manipulations x strategies).
+        See the `config.txt` for these settings.
+
+        Returns:
+            A string of the mapping path for all of the strategies/manipulations.
+            mapped to their respective experiment folders.
         """
+
         for self.manipulation, dim in self.MANIPULATIONS.items():
             for strategy in self.STRATEGIES:
                 val = self.run_learner_on_experiment(strategy, dim, self.manipulation)
@@ -105,8 +109,14 @@ class PsychopyLearner(object):
 
     def oracle(self, x):
         """
-        Run a psychopy experiment by scaling up the features so they can be used as input.
+        Run a Psychopy experiment by scaling up the features so they can be used as input.
         Then scale down the output for the active learner.
+
+        Args:
+            x(list[float]): A list of floats each between 0 and 1.0 telling us the current dimensions.
+
+        Return:
+            A float between 0 and 1.0 indicating the learner's manipulation.
         """
         max_n_dots = 100
         # Scale up
@@ -132,7 +142,13 @@ class PsychopyLearner(object):
     def dummy_oracle(self, x):
         """
         The oracle usually manipulates the dimension(s) in x based on prior information.
-        This dummy oracle does not manipulate any dimensions, it simply returns the dots displayed
+        This dummy oracle does not manipulate any dimensions, it simply returns the dots displayed.
+
+        Args:
+            x(list[float]): A list of floats each between 0 and 1.0 telling us the current dimensions.
+
+        Returns:
+            A float between 0 and 1.0 indicating the learner's manipulation.
         """
         max_n_dots = 100
         # Scale up
@@ -156,6 +172,18 @@ class PsychopyLearner(object):
         return translate
 
     def run_learner_on_experiment(self, strategy, dim, manipulation):
+        """
+        Run a single experiment using a single learner, dimension, and manipulation.
+
+        Args:
+            strategy(str): The learner strategy being used from BAMS.
+            dim(int): The number of dimensions being manipulated.
+            manipulation(str): The type name of the dimension being manipulated.
+
+
+        Returns:
+            A string of the experiment UUID where the output data lives.
+        """
         UUID = str(uuid.uuid4())
         PATH = self.DATA_PATH + UUID + "/"
         NAME = "%s_%s" % (strategy, manipulation)

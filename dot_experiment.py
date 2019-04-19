@@ -2,17 +2,18 @@ import random
 from psychopy import visual, event, core
 import time
 
-"""
-This file runs the dot experiment using the Psychopy Toolbox, which presents
-a uniform distribution of dots across a 500x500 screen. It takes as input the
-`n_dots` being displayed and the `contrast` of those dots. This is used by the Bayesian
-active model selection code in `psychopy_learner.py` which manipulates a combination of these variables
-in order to converge to the kernel grammar which best describes the relationship between stimuli and
-human behavior.
-"""
-
 
 def get_typed_answer(win, guess):
+    """
+    Retrieve user input.
+
+    Args:
+        win(object): The Psychopy window used.
+        guess(object): The answer_text object where we will save the guess.
+
+    Returns:
+        An integer of the user's response.
+    """
     instruction_text = visual.TextStim(win, text=u'How many dots did you see?', pos=(0, 100))
     guess.text = ''
     timeout = time.time() + 5
@@ -36,7 +37,23 @@ def get_typed_answer(win, guess):
         win.flip()
 
 
-def run_experiment(win, guess, n_dots, contrast):
+def run_experiment(win, answer_text, n_dots, contrast):
+    """
+    Runs the dot experiment using the Psychopy Toolbox, which presents
+    a uniform distribution of dots across a 500x500 screen. This is used by the Bayesian
+    active model selection code in `psychopy_learner.py` which manipulates a combination of these variables
+    in order to converge to the kernel grammar which best describes the relationship between stimuli and
+    human behavior.
+
+    Args:
+        win(object): The Psychopy window used.
+        answer_text(object): The answer_text object where we will save the guess.
+        n_dots(int): The number of dots presented.
+        contrast(float): The contrast value of the dots.
+
+    Returns:
+        An integer of the user's response.
+    """
     dot_xys = []
 
     for dot in range(n_dots):
@@ -60,13 +77,11 @@ def run_experiment(win, guess, n_dots, contrast):
     win.flip()
 
     # Collect response
-    return (get_typed_answer(win, guess))
+    return (get_typed_answer(win, answer_text))
 
 
 if __name__ == "__main__":
-    """
-    Run a test of the experiment.
-    """
+    # Run a test of the experiment.
     win = visual.Window(
         size=[500, 500],
         units="pix",
