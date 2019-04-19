@@ -13,18 +13,12 @@ import random
 
 def run_predictions(learner, manipulate):
     """
-    Use learner.predict on a float between 0 and 1.
-        Parameters
-        ----------
-        learner :
-            BAMS learner object
-        manipulate :
-            String of the manipulation
+    Args:
+        param1 learner: BAMS learner object
+        param2 manipulate: String of the manipulated dimension ("dots", "contrast", "dummy", or "all")
 
-        Returns
-        -------
-        predictionList:
-            n list of predicted values
+    Returns:
+        predictionList: n list of predicted values
     """
     predictionList = []
     for i in range(0, 100):
@@ -32,6 +26,7 @@ def run_predictions(learner, manipulate):
         if manipulate == "all":
             two = random.random()
             three = random.random()
+            # Use learner.predict on a float between 0 and 1 and it returns a 2D list of dimensions[[x][x]]
             output = learner.predict([[float(i / 100.0), two, three]])[0]
         else:
             output = learner.predict([float(i / 100.0)])[0]
@@ -41,7 +36,7 @@ def run_predictions(learner, manipulate):
     return (predictionList)
 
 
-def get_trial_data(path, strategy, manipulate, save=True):
+def get_trial_data(path, strategy, manipulate, save=False):
     full_path = "%s/%s_%s_trials" % (path, strategy, manipulate)
     trial_df = pd.read_pickle("%s.pkl" % full_path)
     if save:
