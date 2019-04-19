@@ -74,7 +74,7 @@ class PsychopyLearner(object):
         See the `config.txt` for these settings.
 
         Returns:
-            A string of the mapping path for all of the strategies/manipulations.
+            str: The mapping path for all of the strategies/manipulations.
             mapped to their respective experiment folders.
         """
 
@@ -116,7 +116,7 @@ class PsychopyLearner(object):
             x(list[float]): A list of floats each between 0 and 1.0 telling us the current dimensions.
 
         Return:
-            A float between 0 and 1.0 indicating the learner's manipulation.
+            float: Value between 0 and 1.0 indicating the learner's manipulation.
         """
         max_n_dots = 100
         # Scale up
@@ -148,7 +148,7 @@ class PsychopyLearner(object):
             x(list[float]): A list of floats each between 0 and 1.0 telling us the current dimensions.
 
         Returns:
-            A float between 0 and 1.0 indicating the learner's manipulation.
+            float: Value between 0 and 1.0 indicating the learner's manipulation.
         """
         max_n_dots = 100
         # Scale up
@@ -182,7 +182,7 @@ class PsychopyLearner(object):
 
 
         Returns:
-            A string of the experiment UUID where the output data lives.
+            str: The experiment UUID where the output data lives.
         """
         UUID = str(uuid.uuid4())
         PATH = self.DATA_PATH + UUID + "/"

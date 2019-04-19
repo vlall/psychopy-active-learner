@@ -14,11 +14,11 @@ import random
 def run_predictions(learner, manipulate):
     """
     Args:
-        param1 learner: BAMS learner object
-        param2 manipulate: String of the manipulated dimension ("dots", "contrast", "dummy", or "all")
+        learner(object): The BAMS learner.
+        manipulate(str): The manipulated dimension ("dots", "contrast", "dummy", or "all")
 
     Returns:
-        predictionList: n list of predicted values
+        list: The predicted values using learner.predict()
     """
     predictionList = []
     for i in range(0, 100):

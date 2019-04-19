@@ -12,7 +12,7 @@ def get_typed_answer(win, guess):
         guess(object): The answer_text object where we will save the guess.
 
     Returns:
-        An integer of the user's response.
+        int: The user's guess.
     """
     instruction_text = visual.TextStim(win, text=u'How many dots did you see?', pos=(0, 100))
     guess.text = ''
@@ -52,7 +52,7 @@ def run_experiment(win, answer_text, n_dots, contrast):
         contrast(float): The contrast value of the dots.
 
     Returns:
-        An integer of the user's response.
+        int: The user's guess.
     """
     dot_xys = []
 
