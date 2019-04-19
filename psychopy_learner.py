@@ -17,6 +17,26 @@ from six.moves import configparser
 
 
 class PsychopyLearner(object):
+    """
+    Attributes are set from the config.txt
+
+    Args:
+        None
+
+    Attributes:
+        STRATEGIES (list[str]): The active learner objects from BAMS which we use in the experiment
+        MANIPULATIONS (dict): The variables the learner is manipulating. The key is the name of the
+            manipulated variable. The value is the number of dimensions being manipulated.
+        POOL_SIZE (int): Pool size tells you the maximum amount of candidate models
+            (TODO: Check if this is correct! Pool size might be doing something different*)
+        BUDGET (int): The budget sets the amount of iterations.
+        BASE_KERNELS (list[str]): Exception error code.
+        DEPTH (int): Exception error code.
+        DATA_PATH (str): The data output path.
+        HUMAN (bool): True sets this to the regular `PsychopyLearner.oracle()`,
+            False sets this to the `Psychopy.dummer_oracle()`.
+
+    """
 
     def __init__(self):
         # Read the config file
@@ -28,13 +48,13 @@ class PsychopyLearner(object):
             configData.update(dict(parser.items(section)))
 
         # Set the config values
+        self.STRATEGIES = list(configData["strategies"].split(", "))
+        self.MANIPULATIONS = json.loads((configData["manipulations"]))
         self.POOL_SIZE = int(configData["pool_size"])
         self.BUDGET = int(configData["budget"])
         self.BASE_KERNELS = list(configData["base_kernels"].split(", "))
         self.DEPTH = int(configData["depth"])
         self.DATA_PATH = configData["data_path"]
-        self.STRATEGIES = list(configData["strategies"].split(", "))
-        self.MANIPULATIONS = json.loads((configData["manipulations"]))
         self.HUMAN = str(configData["human"])
 
         # Initialize data structures
