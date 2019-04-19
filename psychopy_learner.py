@@ -35,7 +35,6 @@ class PsychopyLearner(object):
         DATA_PATH (str): The data output path.
         HUMAN (bool): True sets this to the regular `PsychopyLearner.oracle()`,
             False sets this to the `Psychopy.dummer_oracle()`.
-
     """
 
     def __init__(self):
@@ -69,7 +68,7 @@ class PsychopyLearner(object):
                 fullscr=False
             )
         else:
-            self.oracle = self.dummy_oracle 
+            self.oracle = self.dummy_oracle
 
     def run_matrix(self):
         """
