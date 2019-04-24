@@ -2,9 +2,9 @@
 
 [![Build Status](https://travis-ci.com/vlall/psychopy-active-learner.svg?token=u4sdN1vvyVBZq3MUz13n&branch=master)](https://travis-ci.com/vlall/psychopy-active-learner)
 
-This project runs a basic numerosity experiment using the Psychopy Toolbox which presents
+This project runs a basic numerosity experiment which presents
 a uniform distribution of 0<=x<=100 dots across a 500x500 window. Hyper-parameters are set in the `config.txt`. During the normal `oracle` execution, `dot_experiment.py` file takes as input the `n_dots` being pressented and the `contrast` of those dots. During each trial of presentation, the Bayesian
-active model selection code in `psychopy_learner.py` manipulates certain varaibles using the experiment in `do_experiment.py` to learn the relationship between the manipulation present and the dots guessed. This relationship is modelled using convergence to a certain *kernel grammar* within a *budgeted* trials. These variables are set in the `config.txt`. This kernal grammar is used to describe the relationship between stimuli and human behavior.
+active model selection code in `psychopy_learner.py` manipulates certain varaibles using the experiment in `dot_experiment.py` to learn the relationship between the manipulation present and the dots guessed. This relationship is modelled using convergence to a certain *kernel grammar* within a *budgeted* trials. These variables are set in the `config.txt`. This kernal grammar is used to describe the relationship between stimuli and human behavior.
 
 After the experiment is run to completion using the configured hyper-parameters, the experiment generates a `data/` folder along with a UUID used to denote the specific experiment data generated. This is used as input into the analysis scripts for interpretting the data. The program generates a metadata mapping to all of the experiments run in `mappings/`
  
@@ -50,4 +50,9 @@ Once everything is setup you can run the experiment matrix using `python psychop
 
 ### Running the tests
 
-Use `pytest tests` to run from the `tests` directory
+Use `python -m pytest` to run from the `tests` directory
+
+### References:
+Gardner, J., Malkomes, G., Garnett, R., Weinberger, K. Q., Barbour, D., & Cunningham, J. P. (2015). Bayesian active model selection with an application to automated audiometry. In Advances in Neural Information Processing Systems (pp. 2386-2394).
+
+Malkomes, G., Schaff, C., & Garnett, R. (2016). Bayesian optimization for automated model selection. In Advances in Neural Information Processing Systems (pp. 2900-2908).
