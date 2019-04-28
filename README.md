@@ -29,7 +29,7 @@ MANIPULATIONS = {"dots": 1, "contrast": 1, "random": 1, "all": 3}
 # True sets this to the regular `PsychopyLearner.oracle()`, False sets this to the `Psychopy.dummer_oracle()`
 HUMAN = False
 
-# Pool size tells you the maximum amount of candidate models
+# Pool size tells you granularity of learner outputs for estimating the function using Sobol generation.
 POOL_SIZE = 200
 
 # The budget sets the amount of iterations
