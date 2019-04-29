@@ -35,7 +35,7 @@ POOL_SIZE = 200
 # The budget sets the amount of iterations
 BUDGET = 50
 
-# The base kernels descrive the kernels to use, later combined
+# The base kernels describe the kernels to use, later combined into a grammar (see: https://github.com/Dallinger/bams/blob/2010737f5763ef5949f1b83c9917da089680174f/bams/models.py#L133-L149) 
 BASE_KERNELS = PER, LIN, K, LG
 
 # The depth specifies the degree to which the base kerneles are combined
